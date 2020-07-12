@@ -1,6 +1,7 @@
 package com.example.finalproject;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    private static final String ACTIVITY_NAME = "RegisterActivity";
     Button createAccount;
     EditText firstName;
     EditText lastName;
@@ -38,5 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
             // Close activity once account is saved.
             finish();
         });
+
+        Log.i(ACTIVITY_NAME, "In function: " + "onCreate");
     }
 }

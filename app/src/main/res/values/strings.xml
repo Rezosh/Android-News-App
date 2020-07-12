@@ -12,4 +12,8 @@
     <string name="Account_Created">Account Created!</string>
     <string name="remember_me">Remember Me</string>
     <string name="sign_up_page_text">Join the team!</string>
+    <string name="search">Search</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
 </resources>
