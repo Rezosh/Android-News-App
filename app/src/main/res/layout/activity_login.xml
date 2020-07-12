@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true"
+    tools:context=".LoginActivity">
+
+    <TextView
+        android:id="@+id/activityLogin_greeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="150dp"
+        android:text="@string/welcome_to_the_guardian"
+        android:textColor="#000000"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/activityLogin_email"
+        android:layout_width="300dp"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/activityLogin_greeting"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="70dp"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:autofillHints="email"
+        android:gravity="center"
+        />
+
+    <EditText android:id="@+id/activityLogin_password"
+        android:layout_width="300dp"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/activityLogin_email"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:hint="@string/password"
+        android:autofillHints="password"
+        android:inputType="textPassword"
+        android:gravity="center" />
+
+    <CheckBox
+        android:id="@+id/activityLogin_rememberMeCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/remember_me"
+        android:layout_below="@id/activityLogin_password"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/activityLogin_LoginBtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activityLogin_rememberMeCheckbox"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/login" />
+
+    <Button
+        android:id="@+id/activityLogin_RegisterBtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activityLogin_LoginBtn"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/sign_up" />
+
+</RelativeLayout>
