@@ -20,8 +20,6 @@ public class LoginActivity extends AppCompatActivity {
     CheckBox rememberMe;
     EditText emailField;
     EditText passwordField;
-    private Boolean saveLogin;
-    private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
 
 //  TODO: Need to add progress bars
@@ -39,10 +37,10 @@ public class LoginActivity extends AppCompatActivity {
         emailField = findViewById(R.id.activityLogin_email);
         rememberMe = findViewById(R.id.activityLogin_rememberMeCheckbox);
         passwordField = findViewById(R.id.activityLogin_password);
-        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
 
-        saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
 
         if (saveLogin) {
             emailField.setText(loginPreferences.getString("email", ""));
