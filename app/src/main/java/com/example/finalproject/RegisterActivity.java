@@ -57,19 +57,19 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
             if (user_lName.matches("")){
-                firstName.setError("Field is required");
+                lastName.setError("Field is required");
                 return;
             }
             if (userEmail.matches("")){
-                firstName.setError("Field is required");
+                email.setError("Field is required");
                 return;
             }
             if (userPassword.matches("")){
-                firstName.setError("Field is required");
+                password.setError("Field is required");
                 return;
             }
             if (userConfirmPassword.matches("")){
-                firstName.setError("Field is required");
+                confirmPassword.setError("Field is required");
                 return;
             }
             // Save credentials in db.
