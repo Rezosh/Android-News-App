@@ -1,89 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/activityRegister_topText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/sign_up_page_text"
-        android:textSize="30sp"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="50dp"
-        android:padding="50dp"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/activityRegister_firstName"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/activityRegister_topText"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="10dp"
-        android:hint="@string/first_name"
-        tools:ignore="Autofill"
-        android:gravity="center"
-        android:inputType="textPersonName"/>
+        <TextView
+            android:id="@+id/activityRegister_topText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_up_page_text"
+            android:textSize="30sp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="30dp"
+            app:layout_constraintBottom_toTopOf="@id/activityRegister_firstName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/activityRegister_lastName"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/activityRegister_firstName"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="10dp"
-        android:hint="@string/last_name"
-        android:gravity="center"
-        tools:ignore="Autofill"
-        android:inputType="textPersonName"/>
-    <EditText
-        android:id="@+id/activityRegister_email"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/activityRegister_lastName"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="10dp"
-        android:hint="@string/email"
-        android:gravity="center"
-        android:autofillHints="email"
-        android:inputType="textEmailAddress"/>
-    <EditText
-        android:id="@+id/activityRegister_password"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/activityRegister_email"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="10dp"
-        android:hint="@string/password"
-        android:gravity="center"
-        android:autofillHints="password"
-        android:inputType="textPassword"/>
-    <EditText
-        android:id="@+id/activityRegister_confirmPassword"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/activityRegister_password"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="10dp"
-        android:hint="@string/confirm_password"
-        android:gravity="center"
-        android:autofillHints="password"
-        android:inputType="textPassword" />
+        <EditText
+            android:id="@+id/activityRegister_firstName"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="@string/first_name"
+            android:inputType="textPersonName"
+            tools:ignore="Autofill"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintTop_toBottomOf="@id/activityRegister_topText"
+            app:layout_constraintBottom_toTopOf="@id/activityRegister_lastName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    <Button
-        android:id="@+id/activityRegister_createAccountBtn"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/activityRegister_confirmPassword"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="30dp"
-        android:text="@string/create_account"/>
+        <EditText
+            android:id="@+id/activityRegister_lastName"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/last_name"
+            android:gravity="center"
+            tools:ignore="Autofill"
+            android:inputType="textPersonName"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintTop_toBottomOf="@id/activityRegister_firstName"
+            app:layout_constraintBottom_toTopOf="@id/activityRegister_email"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <EditText
+            android:id="@+id/activityRegister_email"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"
+            android:gravity="center"
+            android:autofillHints="email"
+            android:inputType="textEmailAddress"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintTop_toBottomOf="@id/activityRegister_lastName"
+            app:layout_constraintBottom_toTopOf="@id/activityRegister_password"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <EditText
+            android:id="@+id/activityRegister_password"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:gravity="center"
+            android:autofillHints="password"
+            android:inputType="textPassword"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintTop_toBottomOf="@id/activityRegister_email"
+            app:layout_constraintBottom_toTopOf="@id/activityRegister_confirmPassword"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <EditText
+            android:id="@+id/activityRegister_confirmPassword"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/confirm_password"
+            android:gravity="center"
+            android:autofillHints="password"
+            android:inputType="textPassword"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintTop_toBottomOf="@id/activityRegister_password"
+            app:layout_constraintBottom_toTopOf="@id/activityRegister_createAccountBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <Button
+            android:id="@+id/activityRegister_createAccountBtn"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activityRegister_confirmPassword"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="30dp"
+            android:text="@string/create_account"
+            app:layout_constraintTop_toBottomOf="@id/activityRegister_confirmPassword"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
 
 
-</RelativeLayout>
+</ScrollView>

@@ -101,12 +101,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         String message;
-        if (item.getItemId() == R.id.toolbar_search) {
-            message = "You clicked on search";
-        } else {
-            return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.toolbar_search:
+                message = "You clicked on search";
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+            case R.id.toolbar_info:
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle("App Information");
+                alertDialogBuilder.setMessage("Made By: Sebastien Corneau\nVersion: 1.0\nContact: corn0123@algonquinlive.com");
+                alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                alertDialogBuilder.create().show();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         return true;
     }
 

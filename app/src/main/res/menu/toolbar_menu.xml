@@ -7,14 +7,26 @@
         android:icon="@drawable/search"
         android:title="@string/search"
         app:showAsAction="always"
-        android:orderInCategory="100"/>
+        android:orderInCategory="100"
+        />
 
     <item
         android:id="@+id/toolbar_favorite"
         android:icon="@drawable/heart_outline"
         android:title="Favorite"
         app:showAsAction="always"
+        android:orderInCategory="75"/>
+
+    <item
+        android:id="@+id/toolbar_help"
+        android:title="Help"
+        app:showAsAction="never"
         android:orderInCategory="50"/>
+
+    <item android:id="@+id/toolbar_info"
+        android:title="App Info"
+        app:showAsAction="never"
+        android:orderInCategory="25"/>
 
 
 

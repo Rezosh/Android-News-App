@@ -57,6 +57,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // When button is clicked it starts mainActivity
         loginBtn.setOnClickListener(click -> {
+
+
             Toast.makeText(click.getContext(), "Logged in successfully!", Toast.LENGTH_SHORT).show();
             Intent mainActivity = new Intent(this, MainActivity.class);
             startActivity(mainActivity);
