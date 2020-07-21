@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             View newView = convertView;
 
             if (newView == null) {
-                newView = getLayoutInflater().inflate(R.layout.testing, parent, false);
+                newView = getLayoutInflater().inflate(R.layout.row, parent, false);
             }
             Log.i("MainActivity", "<<<<---- ADAPTER ---->>>>");
             TextView title = newView.findViewById(R.id.rowTitle);

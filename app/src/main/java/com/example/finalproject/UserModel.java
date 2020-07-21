@@ -1,5 +1,8 @@
 package com.example.finalproject;
 
+/**
+ * Model used to save Users
+ */
 public class UserModel {
     public long userId;
     public String fName;

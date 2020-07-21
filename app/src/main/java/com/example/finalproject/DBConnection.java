@@ -5,11 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 public class DBConnection extends SQLiteOpenHelper {
 
-//    TODO: Make db tables and queries.
     private final static String DATABASE_NAME = "GuardianDB";
     private final static int VERSION_NUM = 1;
     public final static String FAVORITE_TABLE_NAME = "Favorites";
@@ -64,6 +62,10 @@ public class DBConnection extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Insert a user into the database
+     * @param queryValues User object
+     */
     public void insertUser (UserModel queryValues) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -78,6 +80,12 @@ public class DBConnection extends SQLiteOpenHelper {
         db.close();
     }
 
+
+    /**
+     * Used to get a user from the database
+     * @param email User email address
+     * @return UserModel with results from the database
+     */
     public UserModel getUser (String email){
         SQLiteDatabase db = this.getReadableDatabase();
 
