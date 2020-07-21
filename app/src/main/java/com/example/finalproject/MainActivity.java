@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Toolbar toolbar;
     ListView listView;
     ListAdapter listAdapter;
+    ProgressBar pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +57,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         req.execute("https://content.guardianapis.com/search?api-key=099b3bf9-74f6-4441-b4ef-fb8ec4aabb46&q=tech&page-size=50&show-fields=thumbnail");
         // TODO: Add a url builder to search api.
 
+        // Set progress bar
+        pb = (ProgressBar) findViewById(R.id.main_progressBar) ;
 
         listView = findViewById(R.id.mainActivity_ListView);
         listAdapter = new ListAdapter();
         listView.setAdapter(listAdapter);
+
+
+
 
 
         toolbar = findViewById(R.id.activityMain_toolbar);
@@ -101,21 +108,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         String message;
-        switch (item.getItemId()) {
-            case R.id.toolbar_search:
-                message = "You clicked on search";
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-
-            case R.id.toolbar_info:
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setTitle("App Information");
-                alertDialogBuilder.setMessage("Made By: Sebastien Corneau\nVersion: 1.0\nContact: corn0123@algonquinlive.com");
-                alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-                alertDialogBuilder.create().show();
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + item.getItemId());
+        if (item.getItemId() == R.id.toolbar_search) {
+            message = "You clicked on search";
+        } else {
+            return super.onOptionsItemSelected(item);
         }
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         return true;
     }
 
@@ -206,11 +204,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 //open the connection
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
+                pb.setProgress(25);
                 //wait for data:
                 InputStream response = urlConnection.getInputStream();
 
-
+                pb.setProgress(40);
                 //JSON reading:
                 //Build the entire string response:
                 BufferedReader reader = new BufferedReader(new InputStreamReader(response, StandardCharsets.UTF_8), 8);
@@ -222,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 String result = sb.toString(); //result is the whole string
 
-
+                pb.setProgress(75);
                 // convert string to JSON:
                 JSONObject resp = new JSONObject(result);
                 JSONObject parsed = resp.getJSONObject("response");
@@ -247,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Log.e("MainActivity", "JSONException ERROR: " + e);
 
                     }
+                    pb.setProgress(95);
                 }
 
             } catch (Exception e) {
@@ -258,11 +257,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         public void onProgressUpdate(Integer... args) {
             // TODO: Add loading bar for articles
+
+            pb.setVisibility(View.VISIBLE);
         }
 
         public void onPostExecute(String fromDoInBackground) {
             // Update the listview with all the articles
             listAdapter.notifyDataSetChanged();
+            pb.setVisibility(View.INVISIBLE);
             super.onPostExecute(fromDoInBackground);
 
         }
