@@ -1,73 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_alignParentTop="true"
     tools:context=".LoginActivity">
 
-    <TextView
-        android:id="@+id/activityLogin_greeting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="150dp"
-        android:text="@string/welcome_to_the_guardian"
-        android:textColor="#000000"
-        android:textSize="30sp" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/activityLogin_greeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/activityLogin_email"
+            android:layout_marginTop="150dp"
+            android:text="@string/welcome_to_the_guardian"
+            android:textColor="#000000"
+            android:textSize="30sp" />
 
-    <EditText
-        android:id="@+id/activityLogin_email"
-        android:layout_width="300dp"
-        android:layout_centerInParent="true"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/activityLogin_greeting"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="70dp"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:autofillHints="email"
-        android:gravity="center"
-        />
+        <EditText
+            android:id="@+id/activityLogin_email"
+            android:layout_width="300dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activityLogin_greeting"
+            app:layout_constraintBottom_toTopOf="@id/activityLogin_password"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/activityLogin_greeting"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="70dp"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:autofillHints="email"
+            android:gravity="center"
+            />
 
-    <EditText android:id="@+id/activityLogin_password"
-        android:layout_width="300dp"
-        android:layout_centerInParent="true"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/activityLogin_email"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:hint="@string/password"
-        android:autofillHints="password"
-        android:inputType="textPassword"
-        android:gravity="center" />
+        <EditText android:id="@+id/activityLogin_password"
+            android:layout_width="300dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activityLogin_email"
+            app:layout_constraintBottom_toTopOf="@id/activityLogin_rememberMeCheckbox"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/activityLogin_email"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:hint="@string/password"
+            android:gravity="center"
+            android:autofillHints="password"
+            android:inputType="textPassword" />
 
-    <CheckBox
-        android:id="@+id/activityLogin_rememberMeCheckbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/remember_me"
-        android:layout_below="@id/activityLogin_password"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="5dp"/>
+        <CheckBox
+            android:id="@+id/activityLogin_rememberMeCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activityLogin_password"
+            android:text="@string/remember_me"
+            app:layout_constraintBottom_toTopOf="@id/activityLogin_LoginBtn"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activityLogin_password" />
 
-    <Button
-        android:id="@+id/activityLogin_LoginBtn"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/activityLogin_rememberMeCheckbox"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="20dp"
-        android:text="@string/login" />
+        <Button
+            android:id="@+id/activityLogin_LoginBtn"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activityLogin_rememberMeCheckbox"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activityLogin_rememberMeCheckbox"
+            app:layout_constraintBottom_toTopOf="@id/activityLogin_RegisterBtn"
+            android:text="@string/login" />
 
-    <Button
-        android:id="@+id/activityLogin_RegisterBtn"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/activityLogin_LoginBtn"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="10dp"
-        android:text="@string/sign_up" />
+        <Button
+            android:id="@+id/activityLogin_RegisterBtn"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activityLogin_LoginBtn"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activityLogin_LoginBtn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/sign_up" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</RelativeLayout>
+</ScrollView>

@@ -16,7 +16,18 @@
         android:id="@+id/activityMain_toolbar"
         app:titleTextColor="#FFFFFF"/>
 
-<!--    I want to add a navigation drawer here to navigate to home, favorites, settings?    -->
+    <!--    I want to add a navigation drawer here to navigate to home, favorites, settings?    -->
+
+
+    <ProgressBar
+        android:id="@+id/main_progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_above="@+id/mainActivity_ListView"
+        android:layout_below="@+id/activityMain_toolbar"
+        android:layout_marginBottom="-30dp"
+        android:visibility="visible"/>
 
     <ListView
         android:id="@+id/mainActivity_ListView"

@@ -1,12 +1,13 @@
 package com.example.finalproject;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBConnection extends SQLiteOpenHelper {
 
-//    TODO: Make db tables and queries.
     private final static String DATABASE_NAME = "GuardianDB";
     private final static int VERSION_NUM = 1;
     public final static String FAVORITE_TABLE_NAME = "Favorites";
@@ -59,6 +60,58 @@ public class DBConnection extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + USERS_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + FAVORITE_TABLE_NAME);
         onCreate(db);
+    }
+
+    /**
+     * Insert a user into the database
+     * @param queryValues User object
+     */
+    public void insertUser (UserModel queryValues) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues newRowValues = new ContentValues();
+
+        newRowValues.put(COL_FIRST_NAME, queryValues.fName);
+        newRowValues.put(COL_LAST_NAME, queryValues.lName);
+        newRowValues.put(COL_EMAIL, queryValues.email);
+        newRowValues.put(COL_PASS, queryValues.password);
+
+        queryValues.userId = db.insert(USERS_TABLE_NAME, null, newRowValues);
+        db.close();
+    }
+
+
+    /**
+     * Used to get a user from the database
+     * @param email User email address
+     * @return UserModel with results from the database
+     */
+    public UserModel getUser (String email){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        UserModel myUserModel = new UserModel(0, "", "", email, "");
+
+        String query = "Select * from Users where Email ='"+email+"'";
+        Cursor results = db.rawQuery(query, null);
+
+        int userIdColumnIndex = results.getColumnIndex(COL_USER_ID);
+        int fNameColumnIndex = results.getColumnIndex(COL_FIRST_NAME);
+        int lNameColumnIndex = results.getColumnIndex(COL_LAST_NAME);
+        int passwordColumnIndex = results.getColumnIndex(COL_PASS);
+
+        while(results.moveToNext()) {
+
+            myUserModel.userId = results.getLong(userIdColumnIndex);
+            myUserModel.fName = results.getString(fNameColumnIndex);
+            myUserModel.lName = results.getString(lNameColumnIndex);
+            myUserModel.password = results.getString(passwordColumnIndex);
+
+        }
+        System.out.println("USER: " + myUserModel.password);
+
+
+        results.close();
+        return myUserModel;
     }
 
 }

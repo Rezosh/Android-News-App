@@ -1,5 +1,8 @@
 package com.example.finalproject;
 
+/**
+ * Model used to save articles
+ */
 public class ArticleModel {
 
     private String title;

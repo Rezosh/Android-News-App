@@ -1,10 +1,8 @@
 package com.example.finalproject;
 
-import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -72,13 +70,12 @@ public class RegisterActivity extends AppCompatActivity {
                 confirmPassword.setError("Field is required");
                 return;
             }
-            // Save credentials in db.
-            ContentValues newRowValues = new ContentValues();
-            newRowValues.put(DBConnection.COL_FIRST_NAME, user_fName);
-            newRowValues.put(DBConnection.COL_LAST_NAME, user_lName);
-            newRowValues.put(DBConnection.COL_EMAIL, userEmail);
-            newRowValues.put(DBConnection.COL_PASS, userPassword);
-            db.insert(DBConnection.USERS_TABLE_NAME, null, newRowValues);
+
+            // Makes a user object and saves the values to DB
+            UserModel userModel = new UserModel(0, user_fName, user_lName, userEmail, userPassword);
+            dbConnection.insertUser(userModel);
+            Log.i(ACTIVITY_NAME, "User: " + userModel.userId + " " + userModel.fName + " " + userModel.lName+ " " + userModel.email+ " " + userModel.password);
+
             // Reset fields
             firstName.setText("");
             lastName.setText("");

@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-        // Find buttons in layout
+        // Find Views in layout
         loginBtn = findViewById(R.id.activityLogin_LoginBtn);
         registerBtn = findViewById(R.id.activityLogin_RegisterBtn);
         emailField = findViewById(R.id.activityLogin_email);
@@ -40,8 +40,8 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
 
+        // If remember me is checked put the users credentials in text boxes
         boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
-
         if (saveLogin) {
             emailField.setText(loginPreferences.getString("email", ""));
             passwordField.setText(loginPreferences.getString("password", ""));
@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-
+        // When checkbox is checked it saves the users credentials in shared pref
         rememberMe.setOnCheckedChangeListener( (rememberMe, click) -> {
 
             String email = emailField.getText().toString();
@@ -73,11 +73,10 @@ public class LoginActivity extends AppCompatActivity {
                 loginPrefsEditor.putBoolean("saveLogin", true);
                 loginPrefsEditor.putString("email", email);
                 loginPrefsEditor.putString("password", password);
-                loginPrefsEditor.apply();
             } else {
                 loginPrefsEditor.clear();
-                loginPrefsEditor.apply();
             }
+            loginPrefsEditor.apply();
 
         });
         Log.i(ACTIVITY_NAME, "In function: " + "onCreate");
