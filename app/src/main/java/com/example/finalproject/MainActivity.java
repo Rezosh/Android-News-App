@@ -1,6 +1,10 @@
 package com.example.finalproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.navigation.NavigationView;
@@ -19,6 +23,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -45,7 +51,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Toolbar toolbar;
     ListView listView;
     ListAdapter listAdapter;
-    ProgressBar pb;
+    ProgressBar progressBar;
+    MyHTTPRequest myHTTPRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +60,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         // API Url to query
-        MyHTTPRequest req = new MyHTTPRequest();
-        req.execute("https://content.guardianapis.com/search?api-key=099b3bf9-74f6-4441-b4ef-fb8ec4aabb46&q=tech&page-size=50&show-fields=thumbnail");
+        myHTTPRequest = new MyHTTPRequest();
+        myHTTPRequest.execute("https://content.guardianapis.com/search?api-key=099b3bf9-74f6-4441-b4ef-fb8ec4aabb46&page-size=50&show-fields=thumbnail");
         // TODO: Add a url builder to search api.
 
         // Set progress bar
-        pb = (ProgressBar) findViewById(R.id.main_progressBar) ;
+        progressBar = (ProgressBar) findViewById(R.id.main_progressBar) ;
 
         listView = findViewById(R.id.mainActivity_ListView);
         listAdapter = new ListAdapter();
@@ -91,15 +98,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
 
-
     }
 
     // For ToolBar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate menu
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.toolbar_search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("Search Here!");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String url = buildUrl(query);
+                myHTTPRequest = new MyHTTPRequest();
+                myHTTPRequest.execute(url);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         return true;
     }
 
@@ -108,13 +131,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         String message;
-        if (item.getItemId() == R.id.toolbar_search) {
-            message = "You clicked on search";
-        } else {
-            return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.toolbar_info:
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle("App Information");
+                alertDialogBuilder.setMessage("Made By: Sebastien Corneau\nVersion: 1.0\nContact: corn0123@algonquinlive.com");
+                alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                alertDialogBuilder.create().show();
+                break;
+            case R.id.toolbar_search:
+                message = "You clicked on search";
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         return true;
+
     }
 
     // For Navigation Drawer
@@ -148,6 +181,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
+    private String buildUrl(String search) {
+
+        articleList.clear();
+        listAdapter.notifyDataSetChanged();
+
+
+        return "https://content.guardianapis.com/search?q="+search+"&api-key=099b3bf9-74f6-4441-b4ef-fb8ec4aabb46&page-size=50&show-fields=thumbnail";
+    }
+
 
     protected class ListAdapter extends BaseAdapter {
 
@@ -165,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return 0;
         }
 
+        private int lastPosition = -1;
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View newView = convertView;
@@ -183,6 +226,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .resize(100, 100)
                     .centerCrop()
                     .into(thumbnail);
+            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
+            newView.startAnimation(animation);
+            lastPosition = position;
+
             return newView;
 
         }
@@ -204,11 +251,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 //open the connection
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                pb.setProgress(25);
+                progressBar.setProgress(25);
                 //wait for data:
                 InputStream response = urlConnection.getInputStream();
 
-                pb.setProgress(40);
+                progressBar.setProgress(40);
                 //JSON reading:
                 //Build the entire string response:
                 BufferedReader reader = new BufferedReader(new InputStreamReader(response, StandardCharsets.UTF_8), 8);
@@ -220,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 String result = sb.toString(); //result is the whole string
 
-                pb.setProgress(75);
+                progressBar.setProgress(75);
                 // convert string to JSON:
                 JSONObject resp = new JSONObject(result);
                 JSONObject parsed = resp.getJSONObject("response");
@@ -245,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Log.e("MainActivity", "JSONException ERROR: " + e);
 
                     }
-                    pb.setProgress(95);
+                    progressBar.setProgress(95);
                 }
 
             } catch (Exception e) {
@@ -258,13 +305,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onProgressUpdate(Integer... args) {
             // TODO: Add loading bar for articles
 
-            pb.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         public void onPostExecute(String fromDoInBackground) {
             // Update the listview with all the articles
             listAdapter.notifyDataSetChanged();
-            pb.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
             super.onPostExecute(fromDoInBackground);
 
         }
