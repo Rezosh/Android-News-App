@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Заключний проект</string>
+    <string name="email">Електронна пошта</string>
+    <string name="password">Пароль</string>
+    <string name="login">Вхід</string>
+    <string name="sign_up">Зареєструйтесь</string>
+    <string name="welcome_to_the_guardian">Ласкаво просимо до Guardian!</string>
+    <string name="create_account">Створити акаунт</string>
+    <string name="confirm_password">Підтвердьте пароль</string>
+    <string name="last_name">Прізвище</string>
+    <string name="first_name">Ім\'я</string>
+    <string name="Account_Created">Рахунок успішно створений!</string>
+    <string name="remember_me">Пам\'ятай мене</string>
+    <string name="sign_up_page_text">Приєднуйтесь до команди!</string>
+    <string name="search">Пошук</string>
+    <string name="open">Відкрити</string>
+    <string name="close">Закрити</string>
+    <string name="the_guardian">The Guardian</string>
+
+</resources>
