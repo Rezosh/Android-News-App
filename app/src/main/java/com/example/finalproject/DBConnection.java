@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DBConnection extends SQLiteOpenHelper {
 
@@ -105,7 +106,7 @@ public class DBConnection extends SQLiteOpenHelper {
             myUserModel.fName = results.getString(fNameColumnIndex);
             myUserModel.lName = results.getString(lNameColumnIndex);
             myUserModel.password = results.getString(passwordColumnIndex);
-
+            Log.i("getUser", "user id: " + myUserModel.userId + "FName: " + myUserModel.fName + "LName: " + myUserModel.lName + "Password: " +  myUserModel.password);
         }
         System.out.println("USER: " + myUserModel.password);
 

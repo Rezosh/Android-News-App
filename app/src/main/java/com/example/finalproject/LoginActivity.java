@@ -31,7 +31,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
+        // make a connection with Database
+        DBConnection dbConnection = new DBConnection(this);
+
         // Find Views in layout
+
         loginBtn = findViewById(R.id.activityLogin_LoginBtn);
         registerBtn = findViewById(R.id.activityLogin_RegisterBtn);
         emailField = findViewById(R.id.activityLogin_email);
@@ -57,9 +61,19 @@ public class LoginActivity extends AppCompatActivity {
 
         // When button is clicked it starts mainActivity
         loginBtn.setOnClickListener(click -> {
-            Toast.makeText(click.getContext(), "Logged in successfully!", Toast.LENGTH_SHORT).show();
-            Intent mainActivity = new Intent(this, MainActivity.class);
-            startActivity(mainActivity);
+                String Password = passwordField.toString();
+                String Email = emailField.toString();
+                Log.i(ACTIVITY_NAME, "Entered Password : " + Password + "Tru Password: " + dbConnection.getUser(Email).password);
+
+                    Toast.makeText(click.getContext(), "Logged in successfully!", Toast.LENGTH_SHORT).show();
+                    Intent mainActivity = new Intent(this, MainActivity.class);
+                    startActivity(mainActivity);
+
+
+
+
+
+
         });
 
 

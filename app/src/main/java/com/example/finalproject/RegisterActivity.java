@@ -34,6 +34,8 @@ public class RegisterActivity extends AppCompatActivity {
         password = findViewById(R.id.activityRegister_password);
         confirmPassword = findViewById(R.id.activityRegister_confirmPassword);
 
+
+
         createAccount.setOnClickListener( click -> {
 
             DBConnection dbConnection = new DBConnection(this);
