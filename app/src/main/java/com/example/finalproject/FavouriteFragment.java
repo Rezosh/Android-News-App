@@ -17,12 +17,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -30,7 +28,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class FavoriteFragment extends Fragment {
+public class FavouriteFragment extends Fragment {
 
     private static final String ACTIVITY_NAME = "FavoriteActivity";
     List<ArticleModel> articleList;
@@ -42,14 +40,14 @@ public class FavoriteFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View mainView = inflater.inflate(R.layout.fragment_favorite, container, false);
+        View mainView = inflater.inflate(R.layout.fragment_favourite, container, false);
 
         if(getActivity() != null) {
-            getActivity().setTitle("Favorites");
+            getActivity().setTitle("Favourites");
         }
 
         loadArticle();
-        listView = mainView.findViewById(R.id.favoriteActivity_ListView);
+        listView = mainView.findViewById(R.id.favouriteActivity_ListView);
         ListAdapter listAdapter = new ListAdapter();
         listView.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
@@ -79,7 +77,7 @@ public class FavoriteFragment extends Fragment {
             loadArticle();
             Log.i(ACTIVITY_NAME, "Article successfully deleted from database");
 
-            Snackbar.make(view, "Successfully removed article from favorites", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, "Successfully removed article from favourites", Snackbar.LENGTH_LONG).show();
             return true;
         });
 
@@ -93,7 +91,7 @@ public class FavoriteFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         // Inflate menu
         menu.clear();
-        menuInflater.inflate(R.menu.toolbar_menu_favorites, menu);
+        menuInflater.inflate(R.menu.toolbar_menu_favourites, menu);
     }
 
 
@@ -101,10 +99,10 @@ public class FavoriteFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
 
-        if (item.getItemId() == R.id.favorite_toolbar_help) {
+        if (item.getItemId() == R.id.favourite_toolbar_help) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
             alertDialogBuilder.setTitle("Help");
-            alertDialogBuilder.setMessage("This page displays your favorites." +
+            alertDialogBuilder.setMessage("This page displays your favourites." +
                     " Click on a article to display more information and hold down on them to remove an " +
                     "article from the list.");
             alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
@@ -147,7 +145,7 @@ public class FavoriteFragment extends Fragment {
             if (newView == null) {
                 newView = getLayoutInflater().inflate(R.layout.row, parent, false);
             }
-            Log.i("FavoriteActivity", "<<<<---- ADAPTER ---->>>>");
+            Log.i("FavouriteActivity", "<<<<---- ADAPTER ---->>>>");
             TextView title = newView.findViewById(R.id.rowTitle);
             title.setText(articleList.get(position).getTitle());
 

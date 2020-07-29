@@ -45,7 +45,6 @@ import java.util.List;
 
 public class MainFragment extends Fragment {
     private static final String ACTIVITY_NAME = "MainFragment";
-    private SearchView.OnQueryTextListener queryTextListener;
     List<ArticleModel> articleList = new ArrayList<>();
     ListView listView;
     ListAdapter listAdapter;
@@ -93,7 +92,7 @@ public class MainFragment extends Fragment {
             dbConnection.insertArticle(selectedArticle);
             Log.i(ACTIVITY_NAME, "Article successfully added to database");
 
-            Snackbar.make(view, "Added article to favorites", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, "Added article to favourites", Snackbar.LENGTH_LONG).show();
             return true;
         });
 
@@ -107,18 +106,16 @@ public class MainFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
 
-        switch (item.getItemId()){
-            case R.id.home_toolbar_help:
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                alertDialogBuilder.setTitle("Help");
-                alertDialogBuilder.setMessage("This page displays articles of the day unless specifically searched." +
-                        " Click on a article to display more information and hold down on them to add to " +
-                        "favorites.");
-                alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-                alertDialogBuilder.create().show();
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.home_toolbar_help) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+            alertDialogBuilder.setTitle("Help");
+            alertDialogBuilder.setMessage("This page displays articles of the day unless specifically searched." +
+                    " Click on a article to display more information and hold down on them to add to " +
+                    "favourites.");
+            alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+            alertDialogBuilder.create().show();
         }
+        return super.onOptionsItemSelected(item);
 
     }
 

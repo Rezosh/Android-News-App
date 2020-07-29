@@ -9,9 +9,9 @@
             android:title="@string/home" />
 
         <item
-            android:id="@+id/drawer_favorites"
-            android:icon="@drawable/ic_favorite"
-            android:title="@string/favorites" />
+            android:id="@+id/drawer_favourites"
+            android:icon="@drawable/ic_favourite"
+            android:title="@string/favourites" />
     </group>
 
     <item android:title="@string/other">

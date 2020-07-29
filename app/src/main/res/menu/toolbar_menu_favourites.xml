@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/favorite_toolbar_help"
+        android:id="@+id/favourite_toolbar_help"
         android:orderInCategory="50"
         android:title="@string/help"
         app:showAsAction="never" />
