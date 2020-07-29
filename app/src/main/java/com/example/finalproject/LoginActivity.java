@@ -81,5 +81,4 @@ public class LoginActivity extends AppCompatActivity {
         });
         Log.i(ACTIVITY_NAME, "In function: " + "onCreate");
     }
-
 }
