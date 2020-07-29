@@ -18,15 +18,14 @@
     <string name="open">Відкрити</string>
     <string name="close">Закрити</string>
     <string name="the_guardian">The Guardian</string>
-    <string name="article_thumbnail">Article Thumbnail</string>
-    <string name="favorites">Favorites</string>
-    <string name="home">Home</string>
-    <string name="app_info">App Info</string>
-    <string name="other">Other</string>
-    <string name="sign_out">Sign Out</string>
-    <string name="help">Help</string>
-    <string name="headline">Headline</string>
-    <string name="your_favorites_list_is_empty">Your favorites list is empty!</string>
-    <string name="sort">Sort</string>
+    <string name="article_thumbnail">Ескіз статті</string>
+    <string name="favourites">Вибране</string>
+    <string name="home">додому</string>
+    <string name="app_info">Інформація про програму</string>
+    <string name="other">інший</string>
+    <string name="sign_out">Вийти з аккаунта</string>
+    <string name="help">Довідка</string>
+    <string name="headline">заголовок</string>
+    <string name="your_favorites_list_is_empty">Список улюблених порожній!</string>
 
 </resources>

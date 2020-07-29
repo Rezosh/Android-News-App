@@ -17,16 +17,16 @@
     <string name="open">открыто</string>
     <string name="close">Закрыть</string>
     <string name="the_guardian">The Guardian</string>
-    <string name="article_thumbnail">Article Thumbnail</string>
-    <string name="favorites">Favorites</string>
-    <string name="home">Home</string>
-    <string name="app_info">App Info</string>
-    <string name="other">Other</string>
-    <string name="sign_out">Sign Out</string>
-    <string name="help">Help</string>
-    <string name="headline">Headline</string>
-    <string name="your_favorites_list_is_empty">Your favorites list is empty!</string>
-    <string name="sort">Sort</string>
+    <string name="article_thumbnail">Миниатюра статьи</string>
+    <string name="favourites">Избранные</string>
+    <string name="home">Домой</string>
+    <string name="app_info">Информация о приложении</string>
+    <string name="other">Другой</string>
+    <string name="sign_out">Выход</string>
+    <string name="help">Помогите</string>
+    <string name="headline">Заголовок</string>
+    <string name="your_favorites_list_is_empty">Ваш список избранного пуст!</string>
+
 
 
 </resources>
