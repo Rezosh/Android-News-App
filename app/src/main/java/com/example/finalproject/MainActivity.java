@@ -1,12 +1,11 @@
 package com.example.finalproject;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.SearchView;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -20,6 +19,7 @@ import com.google.android.material.navigation.NavigationView;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
+    String userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Navigation Drawer
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Get users email and add to nav header
+        Bundle passedData = getIntent().getExtras();
+        if (passedData != null) {
+            userEmail = passedData.getString("userEmail");
+        } else {
+            userEmail = "Email";
+        }
+        TextView headerEmail = headerView.findViewById(R.id.navHeader_userEmail);
+        headerEmail.setText(userEmail);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open, R.string.close);
         drawer.addDrawerListener(toggle);
@@ -72,28 +83,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
 
-        switch (item.getItemId()) {
-
-
-            case R.id.toolbar_info:
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setTitle("App Information");
-                alertDialogBuilder.setMessage("Made By: Sebastien Corneau and Paul Magera\n" +
-                        "Version: 1.0\nContact: corn0123@algonquinlive.com");
-                alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-                alertDialogBuilder.create().show();
-                break;
-            case R.id.toolbar_help:
-                alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setTitle("Help");
-                alertDialogBuilder.setMessage("This page displays articles of the day unless specifically searched." +
-                        " Click on a article to display more information and hold down on them to add to " +
-                        "favorites.");
-                alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-                alertDialogBuilder.create().show();
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.home_toolbar_help) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("Help");
+            alertDialogBuilder.setMessage("This page displays articles of the day unless specifically searched." +
+                    " Click on a article to display more information and hold down on them to add to " +
+                    "favorites.");
+            alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+            alertDialogBuilder.create().show();
+        } else {
+            return super.onOptionsItemSelected(item);
         }
 
         return true;
@@ -117,13 +116,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Fragment or alert?
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle("App Information");
-                alertDialogBuilder.setMessage("Made By: Sebastien Corneau\nVersion: 1.0\nContact: corn0123@algonquinlive.com");
+                alertDialogBuilder.setMessage("Made By: Sebastien Corneau and Paul Magera\nVersion: 1.0\nContact: corn0123@algonquinlive.com");
                 alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
                 alertDialogBuilder.create().show();
                 break;
 
             case R.id.drawer_sign_out:
-                finish();
+                alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle("Sign Out");
+                alertDialogBuilder.setMessage("Are you sure you want to sign out? This will end your current session.");
+                alertDialogBuilder.setPositiveButton("Cancel", (dialog, which) -> dialog.cancel());
+                alertDialogBuilder.setNegativeButton("Yes, Im sure", (dialog, which) -> {finish();});
+                alertDialogBuilder.create().show();
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());

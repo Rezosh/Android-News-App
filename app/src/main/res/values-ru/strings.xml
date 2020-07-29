@@ -26,6 +26,7 @@
     <string name="help">Help</string>
     <string name="headline">Headline</string>
     <string name="your_favorites_list_is_empty">Your favorites list is empty!</string>
+    <string name="sort">Sort</string>
 
 
 </resources>

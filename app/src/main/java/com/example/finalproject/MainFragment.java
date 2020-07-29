@@ -45,7 +45,6 @@ import java.util.List;
 
 public class MainFragment extends Fragment {
     private static final String ACTIVITY_NAME = "MainFragment";
-    private SearchView searchView;
     private SearchView.OnQueryTextListener queryTextListener;
     List<ArticleModel> articleList = new ArrayList<>();
     ListView listView;
@@ -59,6 +58,10 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mainView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        if(getActivity() != null) {
+            getActivity().setTitle("Home");
+        }
 
         listView = mainView.findViewById(R.id.mainActivity_ListView);
         progressBar = mainView.findViewById(R.id.main_progressBar);
@@ -100,14 +103,32 @@ public class MainFragment extends Fragment {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+
+        switch (item.getItemId()){
+            case R.id.home_toolbar_help:
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                alertDialogBuilder.setTitle("Help");
+                alertDialogBuilder.setMessage("This page displays articles of the day unless specifically searched." +
+                        " Click on a article to display more information and hold down on them to add to " +
+                        "favorites.");
+                alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                alertDialogBuilder.create().show();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         // Inflate menu
         menu.clear();
-        menuInflater.inflate(R.menu.toolbar_menu_with_search, menu);
+        menuInflater.inflate(R.menu.toolbar_menu_home, menu);
         MenuItem menuItem = menu.findItem(R.id.toolbar_search);
-        searchView = (SearchView) menuItem.getActionView();
+        SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setQueryHint("Search Here!");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

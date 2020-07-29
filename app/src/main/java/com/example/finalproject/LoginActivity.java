@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(click -> {
             Toast.makeText(click.getContext(), "Logged in successfully!", Toast.LENGTH_SHORT).show();
             Intent mainActivity = new Intent(this, MainActivity.class);
+            mainActivity.putExtra("userEmail", emailField.getText().toString());
             startActivity(mainActivity);
         });
 

@@ -11,16 +11,8 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/toolbar_help"
+        android:id="@+id/home_toolbar_help"
         android:orderInCategory="50"
         android:title="@string/help"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/toolbar_info"
-        android:orderInCategory="25"
-        android:title="@string/app_info"
-        app:showAsAction="never" />
-
-
 </menu>

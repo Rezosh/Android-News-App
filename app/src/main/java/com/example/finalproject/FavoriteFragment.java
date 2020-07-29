@@ -7,6 +7,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -14,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +43,10 @@ public class FavoriteFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View mainView = inflater.inflate(R.layout.fragment_favorite, container, false);
+
+        if(getActivity() != null) {
+            getActivity().setTitle("Favorites");
+        }
 
         loadArticle();
         listView = mainView.findViewById(R.id.favoriteActivity_ListView);
@@ -77,8 +85,36 @@ public class FavoriteFragment extends Fragment {
 
 
 
-
+        setHasOptionsMenu(true);
         return mainView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        // Inflate menu
+        menu.clear();
+        menuInflater.inflate(R.menu.toolbar_menu_favorites, menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+
+        if (item.getItemId() == R.id.favorite_toolbar_help) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+            alertDialogBuilder.setTitle("Help");
+            alertDialogBuilder.setMessage("This page displays your favorites." +
+                    " Click on a article to display more information and hold down on them to remove an " +
+                    "article from the list.");
+            alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+            alertDialogBuilder.create().show();
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+
     }
 
     public void loadArticle() {
