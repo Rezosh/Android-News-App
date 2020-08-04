@@ -27,5 +27,9 @@
     <string name="help">Довідка</string>
     <string name="headline">заголовок</string>
     <string name="your_favorites_list_is_empty">Список улюблених порожній!</string>
+    <string name="profile">Profile</string>
+    <string name="confirm">Confirm</string>
+    <string name="enable_dark_mode">Enable Dark Mode</string>
+    <string name="enable_light_mode">Enable Light Mode</string>
 
 </resources>

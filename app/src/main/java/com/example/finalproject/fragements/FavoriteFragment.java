@@ -1,6 +1,6 @@
-package com.example.finalproject;
+package com.example.finalproject.fragements;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -23,12 +23,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.finalproject.ArticleModel;
+import com.example.finalproject.DBConnection;
+import com.example.finalproject.R;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class FavouriteFragment extends Fragment {
+public class FavoriteFragment extends Fragment {
 
     private static final String ACTIVITY_NAME = "FavoriteActivity";
     List<ArticleModel> articleList;
@@ -43,11 +46,11 @@ public class FavouriteFragment extends Fragment {
         View mainView = inflater.inflate(R.layout.fragment_favourite, container, false);
 
         if(getActivity() != null) {
-            getActivity().setTitle("Favourites");
+            getActivity().setTitle("Favorites");
         }
 
         loadArticle();
-        listView = mainView.findViewById(R.id.favouriteActivity_ListView);
+        listView = mainView.findViewById(R.id.favoriteActivity_ListView);
         ListAdapter listAdapter = new ListAdapter();
         listView.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
@@ -73,11 +76,12 @@ public class FavouriteFragment extends Fragment {
             db = dbConnection.getWritableDatabase();
 
             dbConnection.deleteArticle(selectedArticle.getEndpoint());
-            listAdapter.notifyDataSetChanged();
-            loadArticle();
             Log.i(ACTIVITY_NAME, "Article successfully deleted from database");
 
-            Snackbar.make(view, "Successfully removed article from favourites", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, "Successfully removed article from favorites", Snackbar.LENGTH_LONG).show();
+
+            listAdapter.notifyDataSetChanged();
+            loadArticle();
             return true;
         });
 
@@ -91,7 +95,7 @@ public class FavouriteFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         // Inflate menu
         menu.clear();
-        menuInflater.inflate(R.menu.toolbar_menu_favourites, menu);
+        menuInflater.inflate(R.menu.toolbar_menu_favorites, menu);
     }
 
 
@@ -99,10 +103,10 @@ public class FavouriteFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
 
-        if (item.getItemId() == R.id.favourite_toolbar_help) {
+        if (item.getItemId() == R.id.favorite_toolbar_help) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
             alertDialogBuilder.setTitle("Help");
-            alertDialogBuilder.setMessage("This page displays your favourites." +
+            alertDialogBuilder.setMessage("This page displays your favorites." +
                     " Click on a article to display more information and hold down on them to remove an " +
                     "article from the list.");
             alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
@@ -145,7 +149,7 @@ public class FavouriteFragment extends Fragment {
             if (newView == null) {
                 newView = getLayoutInflater().inflate(R.layout.row, parent, false);
             }
-            Log.i("FavouriteActivity", "<<<<---- ADAPTER ---->>>>");
+            Log.i("FavoriteActivity", "<<<<---- ADAPTER ---->>>>");
             TextView title = newView.findViewById(R.id.rowTitle);
             title.setText(articleList.get(position).getTitle());
 
