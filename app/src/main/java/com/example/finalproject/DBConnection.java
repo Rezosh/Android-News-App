@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DBConnection extends SQLiteOpenHelper {
 
     private final static String DATABASE_NAME = "GuardianDB";
@@ -20,6 +23,10 @@ public class DBConnection extends SQLiteOpenHelper {
     public final static String COL_PASS = "Password";
     public final static String COL_FIRST_NAME = "firstName";
     public final static String COL_LAST_NAME = "lastName";
+    private static final String COL_TITLE = "article_Title";
+    private static final String COL_THUMBNAIL = "article_Thumbnail";
+    private static final String COL_SECTION = "article_Section";
+    private static final String COL_URL = "article_URL";
 
     String createUserTable = "CREATE TABLE " + USERS_TABLE_NAME +
             " (" + COL_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -30,11 +37,9 @@ public class DBConnection extends SQLiteOpenHelper {
 
     String createFavoritesTable = "CREATE TABLE " +
             FAVORITE_TABLE_NAME + " (" +
-            COL_ARTICLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COL_USER_ID + " INTEGER NOT NULL, " +
-            COL_ARTICLE_ENDPOINT_ID + " TEXT, FOREIGN KEY ("+
-            COL_USER_ID+") REFERENCES "+
-            USERS_TABLE_NAME+"("+COL_USER_ID+"));";
+            COL_ARTICLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            COL_ARTICLE_ENDPOINT_ID + " TEXT,"+ COL_TITLE+" TEXT,"
+            + COL_SECTION + " TEXT," + COL_THUMBNAIL + " TEXT," + COL_URL + " TEXT);";
 
     public DBConnection(Context ctx) {
         super(ctx, DATABASE_NAME, null, VERSION_NUM);
@@ -79,6 +84,61 @@ public class DBConnection extends SQLiteOpenHelper {
         queryValues.userId = db.insert(USERS_TABLE_NAME, null, newRowValues);
         db.close();
     }
+
+    /**
+     *  Inserts a users favorite articles into the database
+     * @param queryValues Values to insert into the database
+     */
+    public void insertArticle (ArticleModel queryValues) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues newRowValues = new ContentValues();
+
+        newRowValues.put(COL_ARTICLE_ENDPOINT_ID, queryValues.getEndpoint());
+        newRowValues.put(COL_TITLE, queryValues.getTitle());
+        newRowValues.put(COL_THUMBNAIL, queryValues.getThumbnail());
+        newRowValues.put(COL_SECTION, queryValues.getSection());
+        newRowValues.put(COL_URL, queryValues.getUrl());
+
+        long newId = db.insert(FAVORITE_TABLE_NAME, null, newRowValues);
+        System.out.println(newId);
+        db.close();
+    }
+
+    public void deleteArticle (String endpointId) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(FAVORITE_TABLE_NAME, COL_ARTICLE_ENDPOINT_ID + "=?", new String[] {endpointId});
+        db.close();
+    }
+
+
+    public List<ArticleModel> getArticle () {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        List<ArticleModel> articleList = new ArrayList<>();
+        String query = "Select * from "+FAVORITE_TABLE_NAME+"";
+        Cursor results = db.rawQuery(query, null);
+        int endpointColumnIndex = results.getColumnIndex(COL_ARTICLE_ENDPOINT_ID);
+        int titleColumnIndex = results.getColumnIndex(COL_TITLE);
+        int thumbnailColumnIndex = results.getColumnIndex(COL_THUMBNAIL);
+        int sectionColumnIndex = results.getColumnIndex(COL_SECTION);
+        int urlColumnIndex = results.getColumnIndex(COL_URL);
+
+        while(results.moveToNext()) {
+
+            String endpoint = results.getString(endpointColumnIndex);
+            String title = results.getString(titleColumnIndex);
+            String thumbnail = results.getString(thumbnailColumnIndex);
+            String section = results.getString(sectionColumnIndex);
+            String url = results.getString(urlColumnIndex);
+            ArticleModel articleModel = new ArticleModel(endpoint, title, url, thumbnail, section);
+            articleList.add(articleModel);
+        }
+        results.close();
+        return articleList;
+    }
+
 
 
     /**

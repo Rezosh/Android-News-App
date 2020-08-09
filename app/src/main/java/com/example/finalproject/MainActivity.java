@@ -1,103 +1,73 @@
 package com.example.finalproject;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import com.squareup.picasso.Picasso;
-
 import android.app.AlertDialog;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    List<ArticleModel> articleList = new ArrayList<>();
-    Toolbar toolbar;
-    ListView listView;
-    ListAdapter listAdapter;
-    ProgressBar progressBar;
-    MyHTTPRequest myHTTPRequest;
+    private DrawerLayout drawer;
+    String userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // API Url to query
-        myHTTPRequest = new MyHTTPRequest();
-        myHTTPRequest.execute("https://content.guardianapis.com/search?api-key=099b3bf9-74f6-4441-b4ef-fb8ec4aabb46&page-size=50&show-fields=thumbnail");
-        // TODO: Add a url builder to search api.
-
-        // Set progress bar
-        progressBar = (ProgressBar) findViewById(R.id.main_progressBar) ;
-
-        listView = findViewById(R.id.mainActivity_ListView);
-        listAdapter = new ListAdapter();
-        listView.setAdapter(listAdapter);
-
-
-
-
-
-        toolbar = findViewById(R.id.activityMain_toolbar);
+        // Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            ArticleModel selectedArticle = articleList.get(position);
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle(selectedArticle.getTitle())
-                    .setMessage("Url: " + selectedArticle.getUrl() + "\nSection: " + selectedArticle.getSection())
-                    .setNegativeButton("Go Back", (dialog, which) -> dialog.cancel())
-                    .setPositiveButton("View Article In Browser", ((dialog, which) -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(selectedArticle.getUrl())))))
-                    .create()
-                    .show();
+        // Navigation Drawer
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        navigationView.setNavigationItemSelectedListener(this);
 
-        });
+        // Get users email and add to nav header
+        Bundle passedData = getIntent().getExtras();
+        if (passedData != null) {
+            userEmail = passedData.getString("userEmail");
+        } else {
+            userEmail = "Email";
+        }
+        TextView headerEmail = headerView.findViewById(R.id.navHeader_userEmail);
+        headerEmail.setText(userEmail);
 
-        listView.setOnItemLongClickListener((parent, view, position, id) -> {
-            ArticleModel selectedArticle = articleList.get(position);
-            Snackbar.make(view, "Added article to favorites", Snackbar.LENGTH_LONG).show();
-            // TODO: Add favorites to the database
-            return true;
-        });
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open, R.string.close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MainFragment()).commit();
+            navigationView.setCheckedItem(R.id.drawer_home);
+        }
 
+    }
 
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
     }
 
     // For ToolBar
@@ -105,24 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate menu
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.toolbar_search);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setQueryHint("Search Here!");
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                String url = buildUrl(query);
-                myHTTPRequest = new MyHTTPRequest();
-                myHTTPRequest.execute(url);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
         return true;
     }
 
@@ -130,22 +82,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
-        String message;
-        switch (item.getItemId()) {
-            case R.id.toolbar_info:
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setTitle("App Information");
-                alertDialogBuilder.setMessage("Made By: Sebastien Corneau\nVersion: 1.0\nContact: corn0123@algonquinlive.com");
-                alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-                alertDialogBuilder.create().show();
-                break;
-            case R.id.toolbar_search:
-                message = "You clicked on search";
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+
+        if (item.getItemId() == R.id.home_toolbar_help) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("Help");
+            alertDialogBuilder.setMessage("This page displays articles of the day unless specifically searched." +
+                    " Click on a article to display more information and hold down on them to add to " +
+                    "favorites.");
+            alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+            alertDialogBuilder.create().show();
+        } else {
+            return super.onOptionsItemSelected(item);
         }
+
         return true;
 
     }
@@ -156,167 +105,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()) {
             case R.id.drawer_home:
-                Intent home = new Intent(this, MainActivity.class);
-                startActivity(home);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MainFragment()).commit();
                 break;
             case R.id.drawer_favorites:
-                Log.i("Drawer:", " Favorites pressed");
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavoriteFragment()).commit();
+
                 break;
 
             case R.id.drawer_info:
                 // Fragment or alert?
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle("App Information");
-                alertDialogBuilder.setMessage("Made By: Sebastien Corneau\nVersion: 1.0\nContact: corn0123@algonquinlive.com");
+                alertDialogBuilder.setMessage("Made By: Sebastien Corneau and Paul Magera\nVersion: 1.0\nContact: corn0123@algonquinlive.com");
                 alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
                 alertDialogBuilder.create().show();
                 break;
 
             case R.id.drawer_sign_out:
-                finish();
+                alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle("Sign Out");
+                alertDialogBuilder.setMessage("Are you sure you want to sign out? This will end your current session.");
+                alertDialogBuilder.setPositiveButton("Cancel", (dialog, which) -> dialog.cancel());
+                alertDialogBuilder.setNegativeButton("Yes, Im sure", (dialog, which) -> {finish();});
+                alertDialogBuilder.create().show();
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }
-        return false;
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
-
-    private String buildUrl(String search) {
-
-        articleList.clear();
-        listAdapter.notifyDataSetChanged();
-
-
-        return "https://content.guardianapis.com/search?q="+search+"&api-key=099b3bf9-74f6-4441-b4ef-fb8ec4aabb46&page-size=50&show-fields=thumbnail";
-    }
-
-
-    protected class ListAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return articleList.size();
-        }
-
-        public Object getItem(int position) {
-            return "This is row " + position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        private int lastPosition = -1;
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View newView = convertView;
-
-            if (newView == null) {
-                newView = getLayoutInflater().inflate(R.layout.row, parent, false);
-            }
-            Log.i("MainActivity", "<<<<---- ADAPTER ---->>>>");
-            TextView title = newView.findViewById(R.id.rowTitle);
-            title.setText(articleList.get(position).getTitle());
-
-            ImageView thumbnail = newView.findViewById(R.id.rowThumbnail);
-            Picasso
-                    .get()
-                    .load(articleList.get(position).getThumbnail())
-                    .resize(100, 100)
-                    .centerCrop()
-                    .into(thumbnail);
-            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
-            newView.startAnimation(animation);
-            lastPosition = position;
-
-            return newView;
-
-        }
-
-    }
-
-    private class MyHTTPRequest extends AsyncTask<String, Integer, String> {
-        String articleTitle;
-        String articleUrl;
-        String articleThumbnail;
-        String articleSection;
-
-
-        public String doInBackground(String... args) {
-            try {
-
-
-                URL url = new URL(args[0]);
-
-                //open the connection
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                progressBar.setProgress(25);
-                //wait for data:
-                InputStream response = urlConnection.getInputStream();
-
-                progressBar.setProgress(40);
-                //JSON reading:
-                //Build the entire string response:
-                BufferedReader reader = new BufferedReader(new InputStreamReader(response, StandardCharsets.UTF_8), 8);
-                StringBuilder sb = new StringBuilder();
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line).append("\n");
-                }
-                String result = sb.toString(); //result is the whole string
-
-                progressBar.setProgress(75);
-                // convert string to JSON:
-                JSONObject resp = new JSONObject(result);
-                JSONObject parsed = resp.getJSONObject("response");
-                Log.i("MainActivity", "JSONObject parsed = " + parsed);
-
-                JSONArray jsonArray = parsed.getJSONArray("results");
-                for (int i=0; i < jsonArray.length(); i++) {
-                    try {
-
-                        JSONObject anObject = jsonArray.getJSONObject(i);
-                        JSONObject articleFields = anObject.getJSONObject("fields");
-
-                        articleTitle = anObject.getString("webTitle");
-                        articleUrl = anObject.getString("webUrl");
-                        articleThumbnail = articleFields.getString("thumbnail");
-                        articleSection = anObject.getString("sectionName");
-
-                        ArticleModel articleModel = new ArticleModel(articleTitle, articleUrl, articleThumbnail, articleSection);
-                        articleList.add(articleModel);
-
-                    } catch (JSONException e) {
-                        Log.e("MainActivity", "JSONException ERROR: " + e);
-
-                    }
-                    progressBar.setProgress(95);
-                }
-
-            } catch (Exception e) {
-                Log.e("MainActivity", "ERROR: " + e);
-            }
-
-            return "Done";
-        }
-
-        public void onProgressUpdate(Integer... args) {
-            // TODO: Add loading bar for articles
-
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        public void onPostExecute(String fromDoInBackground) {
-            // Update the listview with all the articles
-            listAdapter.notifyDataSetChanged();
-            progressBar.setVisibility(View.INVISIBLE);
-            super.onPostExecute(fromDoInBackground);
-
-        }
-    }
-
 
 
 }

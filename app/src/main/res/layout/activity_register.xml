@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,10 +14,10 @@
             android:id="@+id/activityRegister_topText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sign_up_page_text"
-            android:textSize="30sp"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="30dp"
+            android:text="@string/sign_up_page_text"
+            android:textSize="30sp"
             app:layout_constraintBottom_toTopOf="@id/activityRegister_firstName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,71 +27,71 @@
             android:id="@+id/activityRegister_firstName"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
             android:hint="@string/first_name"
             android:inputType="textPersonName"
-            tools:ignore="Autofill"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintTop_toBottomOf="@id/activityRegister_topText"
             app:layout_constraintBottom_toTopOf="@id/activityRegister_lastName"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/activityRegister_topText"
+            tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/activityRegister_lastName"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:hint="@string/last_name"
-            android:gravity="center"
-            tools:ignore="Autofill"
-            android:inputType="textPersonName"
             android:layout_marginBottom="10dp"
-            app:layout_constraintTop_toBottomOf="@id/activityRegister_firstName"
+            android:gravity="center"
+            android:hint="@string/last_name"
+            android:inputType="textPersonName"
             app:layout_constraintBottom_toTopOf="@id/activityRegister_email"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/activityRegister_firstName"
+            tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/activityRegister_email"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:hint="@string/email"
-            android:gravity="center"
-            android:autofillHints="email"
-            android:inputType="textEmailAddress"
             android:layout_marginBottom="10dp"
-            app:layout_constraintTop_toBottomOf="@id/activityRegister_lastName"
+            android:autofillHints="email"
+            android:gravity="center"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
             app:layout_constraintBottom_toTopOf="@id/activityRegister_password"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/activityRegister_lastName" />
 
         <EditText
             android:id="@+id/activityRegister_password"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:hint="@string/password"
-            android:gravity="center"
-            android:autofillHints="password"
-            android:inputType="textPassword"
             android:layout_marginBottom="10dp"
-            app:layout_constraintTop_toBottomOf="@id/activityRegister_email"
+            android:autofillHints="password"
+            android:gravity="center"
+            android:hint="@string/password"
+            android:inputType="textPassword"
             app:layout_constraintBottom_toTopOf="@id/activityRegister_confirmPassword"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/activityRegister_email" />
 
         <EditText
             android:id="@+id/activityRegister_confirmPassword"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:hint="@string/confirm_password"
-            android:gravity="center"
-            android:autofillHints="password"
-            android:inputType="textPassword"
             android:layout_marginBottom="10dp"
-            app:layout_constraintTop_toBottomOf="@id/activityRegister_password"
+            android:autofillHints="password"
+            android:gravity="center"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"
             app:layout_constraintBottom_toTopOf="@id/activityRegister_createAccountBtn"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/activityRegister_password" />
 
         <Button
             android:id="@+id/activityRegister_createAccountBtn"
@@ -101,14 +101,11 @@
             android:layout_centerInParent="true"
             android:layout_marginTop="30dp"
             android:text="@string/create_account"
-            app:layout_constraintTop_toBottomOf="@id/activityRegister_confirmPassword"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/activityRegister_confirmPassword" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 
 
 </ScrollView>

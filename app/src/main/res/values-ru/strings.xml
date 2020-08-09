@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Финальный проект</string>
+    <string name="email">Эл. адрес</string>
+    <string name="password">пароль</string>
+    <string name="login">Войти</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="welcome_to_the_guardian">Добро пожаловать в Guardian!</string>
+    <string name="create_account">создать аккаунт</string>
+    <string name="confirm_password">Подтвердите Пароль</string>
+    <string name="last_name">Фамилия</string>
+    <string name="first_name">Имя</string>
+    <string name="Account_Created">Аккаунт созданA!</string>
+    <string name="remember_me">Запомни меня</string>
+    <string name="sign_up_page_text">Присоединиться к команде!</string>
+    <string name="search">Поиск</string>
+    <string name="open">открыто</string>
+    <string name="close">Закрыть</string>
+    <string name="the_guardian">The Guardian</string>
+    <string name="article_thumbnail">Article Thumbnail</string>
+    <string name="favorites">Favorites</string>
+    <string name="home">Home</string>
+    <string name="app_info">App Info</string>
+    <string name="other">Other</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="help">Help</string>
+    <string name="headline">Headline</string>
+    <string name="your_favorites_list_is_empty">Your favorites list is empty!</string>
+    <string name="sort">Sort</string>
+
+
+</resources>

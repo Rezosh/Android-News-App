@@ -74,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
             // Makes a user object and saves the values to DB
             UserModel userModel = new UserModel(0, user_fName, user_lName, userEmail, userPassword);
             dbConnection.insertUser(userModel);
-            Log.i(ACTIVITY_NAME, "User: " + userModel.userId + " " + userModel.fName + " " + userModel.lName+ " " + userModel.email+ " " + userModel.password);
+            Log.i(ACTIVITY_NAME, "User successfully added to database, USER ID: " + userModel.userId);
 
             // Reset fields
             firstName.setText("");

@@ -1,29 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawer_home"
+            android:icon="@drawable/ic_home"
+            android:title="@string/home" />
 
-    <item android:id="@+id/drawer_home"
-        android:title="Home"
-        android:icon="@drawable/home"
-        app:showAsAction="always"
-        android:orderInCategory="25"/>
+        <item
+            android:id="@+id/drawer_favorites"
+            android:icon="@drawable/ic_favorite"
+            android:title="@string/favorites" />
+    </group>
 
-    <item android:id="@+id/drawer_favorites"
-        android:title="Favorites"
-        android:icon="@drawable/heart_filled"
-        app:showAsAction="always"
-        android:orderInCategory="50"/>
+    <item android:title="@string/other">
+        <menu>
+            <item
+                android:id="@+id/drawer_info"
+                android:icon="@drawable/ic_info"
+                android:title="@string/app_info" />
 
-    <item android:id="@+id/drawer_info"
-        android:title="App Info"
-        android:icon="@drawable/about"
-        android:orderInCategory="75"/>
-
-    <item android:id="@+id/drawer_sign_out"
-        android:title="Sign Out"
-        android:icon="@drawable/sign_out"
-        app:showAsAction="always"
-        android:orderInCategory="100"/>
+            <item
+                android:id="@+id/drawer_sign_out"
+                android:icon="@drawable/ic_exit_to_app"
+                android:title="@string/sign_out" />
+        </menu>
+    </item>
 
 
 </menu>
