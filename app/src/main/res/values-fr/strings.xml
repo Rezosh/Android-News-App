@@ -16,14 +16,14 @@
     <string name="open">Ouvrir</string>
     <string name="close">Fermer</string>
     <string name="the_guardian">The Guardian</string>
-    <string name="article_thumbnail">Article Thumbnail</string>
-    <string name="favorites">Favorites</string>
-    <string name="home">Home</string>
-    <string name="app_info">App Info</string>
-    <string name="other">Other</string>
-    <string name="sign_out">Sign Out</string>
-    <string name="help">Help</string>
-    <string name="headline">Headline</string>
-    <string name="your_favorites_list_is_empty">Your favorites list is empty!</string>
-    <string name="sort">Sort</string>
+    <string name="article_thumbnail">Vignettes d\'article</string>
+    <string name="favourites">Favoris</string>
+    <string name="home">Accueil</string>
+    <string name="app_info">Informations sur l\'application</string>
+    <string name="other">Autre</string>
+    <string name="sign_out">"  Déconnexion"</string>
+    <string name="help">Aidez-moi</string>
+    <string name="headline">Gros titre</string>
+    <string name="your_favorites_list_is_empty">Votre liste de favoris est vide!</string>
+
 </resources>
