@@ -26,7 +26,10 @@
     <string name="help">Помогите</string>
     <string name="headline">Заголовок</string>
     <string name="your_favorites_list_is_empty">Ваш список избранного пуст!</string>
-
+    <string name="profile">Profile</string>
+    <string name="confirm">Confirm</string>
+    <string name="enable_dark_mode">Enable Dark Mode</string>
+    <string name="enable_light_mode">Enable Light Mode</string>
 
 
 </resources>

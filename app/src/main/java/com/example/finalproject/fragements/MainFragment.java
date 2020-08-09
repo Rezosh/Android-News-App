@@ -1,7 +1,9 @@
-package com.example.finalproject;
+package com.example.finalproject.fragements;
+
+
+
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -16,18 +18,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.transition.Visibility;
 
+import com.example.finalproject.ArticleModel;
+import com.example.finalproject.DBConnection;
+import com.example.finalproject.R;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.transition.MaterialFade;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -44,16 +57,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainFragment extends Fragment {
+
+    /**
+     * Used for logging
+     */
     private static final String ACTIVITY_NAME = "MainFragment";
+
+    /**
+     * Used to store articles and load them into list view
+     */
     List<ArticleModel> articleList = new ArrayList<>();
+
     ListView listView;
     ListAdapter listAdapter;
+    SearchView searchView;
     ProgressBar progressBar;
     MyHTTPRequest myHTTPRequest;
     SQLiteDatabase db;
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mainView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -64,6 +87,7 @@ public class MainFragment extends Fragment {
 
         listView = mainView.findViewById(R.id.mainActivity_ListView);
         progressBar = mainView.findViewById(R.id.main_progressBar);
+        swipeRefreshLayout = mainView.findViewById(R.id.swiperefresh);
 
         myHTTPRequest = new MyHTTPRequest();
         myHTTPRequest.execute("https://content.guardianapis.com/search?api-key=099b3bf9-74f6-4441-b4ef-fb8ec4aabb46&page-size=50&show-fields=thumbnail");
@@ -75,7 +99,7 @@ public class MainFragment extends Fragment {
             ArticleModel selectedArticle = articleList.get(position);
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
             alertDialogBuilder.setTitle(selectedArticle.getTitle())
-                    .setMessage("Url: " + selectedArticle.getUrl() + "\nSection: " + selectedArticle.getSection())
+                    .setMessage("Url: " + selectedArticle.getUrl() + "\n\nSection: " + selectedArticle.getSection())
                     .setNegativeButton("Go Back", (dialog, which) -> dialog.cancel())
                     .setPositiveButton("View Article In Browser", ((dialog, which) -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(selectedArticle.getUrl())))))
                     .create()
@@ -83,6 +107,7 @@ public class MainFragment extends Fragment {
 
         });
 
+        // Add article to favorites
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
             ArticleModel selectedArticle = articleList.get(position);
 
@@ -91,9 +116,17 @@ public class MainFragment extends Fragment {
 
             dbConnection.insertArticle(selectedArticle);
             Log.i(ACTIVITY_NAME, "Article successfully added to database");
-
-            Snackbar.make(view, "Added article to favourites", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, "Added article to favorites", Snackbar.LENGTH_LONG).show();
             return true;
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                myHTTPRequest = new MyHTTPRequest();
+                myHTTPRequest.execute("https://content.guardianapis.com/search?api-key=099b3bf9-74f6-4441-b4ef-fb8ec4aabb46&page-size=50&show-fields=thumbnail");
+                swipeRefreshLayout.setRefreshing(false);
+            }
         });
 
 
@@ -102,22 +135,6 @@ public class MainFragment extends Fragment {
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-
-        if (item.getItemId() == R.id.home_toolbar_help) {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-            alertDialogBuilder.setTitle("Help");
-            alertDialogBuilder.setMessage("This page displays articles of the day unless specifically searched." +
-                    " Click on a article to display more information and hold down on them to add to " +
-                    "favourites.");
-            alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-            alertDialogBuilder.create().show();
-        }
-        return super.onOptionsItemSelected(item);
-
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
@@ -125,7 +142,7 @@ public class MainFragment extends Fragment {
         menu.clear();
         menuInflater.inflate(R.menu.toolbar_menu_home, menu);
         MenuItem menuItem = menu.findItem(R.id.toolbar_search);
-        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView = (SearchView) menuItem.getActionView();
         searchView.setQueryHint("Search Here!");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -278,4 +295,5 @@ public class MainFragment extends Fragment {
         listAdapter.notifyDataSetChanged();
         return "https://content.guardianapis.com/search?q=" + search + "&api-key=099b3bf9-74f6-4441-b4ef-fb8ec4aabb46&page-size=50&show-fields=thumbnail";
     }
+
 }

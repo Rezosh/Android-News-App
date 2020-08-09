@@ -25,5 +25,9 @@
     <string name="help">Aidez-moi</string>
     <string name="headline">Gros titre</string>
     <string name="your_favorites_list_is_empty">Votre liste de favoris est vide!</string>
+    <string name="profile">Profile</string>
+    <string name="confirm">Confirm</string>
+    <string name="enable_dark_mode">Enable Dark Mode</string>
+    <string name="enable_light_mode">Enable Light Mode</string>
 
 </resources>

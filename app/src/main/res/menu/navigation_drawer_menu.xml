@@ -9,7 +9,7 @@
             android:title="@string/home" />
 
         <item
-            android:id="@+id/drawer_favourites"
+            android:id="@+id/drawer_favorites"
             android:icon="@drawable/ic_favourite"
             android:title="@string/favourites" />
     </group>
@@ -20,7 +20,6 @@
                 android:id="@+id/drawer_info"
                 android:icon="@drawable/ic_info"
                 android:title="@string/app_info" />
-
             <item
                 android:id="@+id/drawer_sign_out"
                 android:icon="@drawable/ic_exit_to_app"

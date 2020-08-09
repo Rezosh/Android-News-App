@@ -1,6 +1,7 @@
 package com.example.finalproject;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,10 +11,13 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.finalproject.fragements.FavoriteFragment;
+import com.example.finalproject.fragements.MainFragment;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -25,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         // Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -83,19 +89,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
 
-        if (item.getItemId() == R.id.home_toolbar_help) {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle("Help");
-            alertDialogBuilder.setMessage("This page displays articles of the day unless specifically searched." +
-                    " Click on a article to display more information and hold down on them to add to " +
-                    "favorites.");
-            alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-            alertDialogBuilder.create().show();
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
+        switch (item.getItemId()) {
+            case R.id.home_toolbar_help:
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle("Help");
+                alertDialogBuilder.setMessage("This page displays articles of the day unless specifically searched." +
+                        " Click on a article to display more information and hold down on them to add to " +
+                        "favorites.");
+                alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                alertDialogBuilder.create().show();
+                break;
+            case R.id.toolbar_theme_dark:
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+            case R.id.toolbar_theme_light:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
 
-        return true;
+            default:
+                return super.onOptionsItemSelected(item);
+            }
+            return true;
 
     }
 
@@ -107,13 +121,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.drawer_home:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MainFragment()).commit();
                 break;
-            case R.id.drawer_favourites:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavouriteFragment()).commit();
-
+            case R.id.drawer_favorites:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavoriteFragment()).commit();
                 break;
 
-            case R.id.drawer_info:
-                // Fragment or alert?
+                case R.id.drawer_info:
+                // Alert Box with application information.
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle("App Information");
                 alertDialogBuilder.setMessage("Made By: Sebastien Corneau and Paul Magera\nVersion: 1.0\nContact: corn0123@algonquinlive.com");
@@ -126,7 +139,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 alertDialogBuilder.setTitle("Sign Out");
                 alertDialogBuilder.setMessage("Are you sure you want to sign out? This will end your current session.");
                 alertDialogBuilder.setPositiveButton("Cancel", (dialog, which) -> dialog.cancel());
-                alertDialogBuilder.setNegativeButton("Yes, Im sure", (dialog, which) -> {finish();});
+                alertDialogBuilder.setNegativeButton("Yes, Im sure", (dialog, which) -> {
+                    Intent loginPage = new Intent(this, LoginActivity.class);
+                    startActivity(loginPage);
+                    finish();
+                });
                 alertDialogBuilder.create().show();
                 break;
             default:
