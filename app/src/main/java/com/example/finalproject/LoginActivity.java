@@ -28,7 +28,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        DBConnection dbConnection = new DBConnection(this);
         setContentView(R.layout.activity_login);
 
 
@@ -58,7 +60,11 @@ public class LoginActivity extends AppCompatActivity {
 
         // When button is clicked it starts mainActivity
         loginBtn.setOnClickListener(click -> {
-            Toast.makeText(click.getContext(), "Logged in successfully!", Toast.LENGTH_SHORT).show();
+            String email = emailField.getText().toString();
+            UserModel userTest = dbConnection.getUser(email);
+
+
+            Toast.makeText(click.getContext(), "Logged in successfully!" + "The user first name is " + userTest.getfName(), Toast.LENGTH_SHORT).show();
             Intent mainActivity = new Intent(this, MainActivity.class);
             mainActivity.putExtra("userEmail", emailField.getText().toString());
             startActivity(mainActivity);

@@ -174,7 +174,6 @@ public class DBConnection extends SQLiteOpenHelper {
 
         }
         UserModel myUserModel = new UserModel(userId, fName, lName, email, password);
-
         System.out.println("USER: " + password);
 
 
