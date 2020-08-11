@@ -24,12 +24,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawer;
     String userEmail;
-    String userName;
-
+    DBConnection dbConnection = new DBConnection(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
 
 
@@ -47,16 +47,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Bundle passedData = getIntent().getExtras();
         if (passedData != null) {
             userEmail = passedData.getString("userEmail");
-            userName = passedData.getString("userName");
-            TextView headerEmail = headerView.findViewById(R.id.navHeader_userEmail);
-            headerEmail.setText(userEmail);
-
-            TextView name = headerView.findViewById(R.id.navHeader_name);
-            name.setText(userName);
+        } else {
+            userEmail = "Email";
         }
+        TextView headerEmail = headerView.findViewById(R.id.navHeader_userEmail);
+        headerEmail.setText(userEmail);
 
-
-        // Navigation Drawer
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open, R.string.close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -134,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Alert Box with application information.
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle("App Information");
-                alertDialogBuilder.setMessage("Made By: Sebastien Corneau and Paul Magera\nVersion: 1.0\nContact: corn0123@algonquinlive.com");
+                alertDialogBuilder.setMessage("Made By: Sebastien Corneau and Paul Magera\nVersion: 2.0\nContact: corn0123@algonquinlive.com,\npaul.seed18@gmail.com");
                 alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
                 alertDialogBuilder.create().show();
                 break;
@@ -151,6 +147,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 });
                 alertDialogBuilder.create().show();
                 break;
+            case R.id.drawer_user_info:
+                UserModel currentUser = dbConnection.getUser(userEmail);
+                    alertDialogBuilder = new AlertDialog.Builder(this);
+                    alertDialogBuilder.setTitle("User Info");
+                    alertDialogBuilder.setMessage("First name: " + currentUser.getfName() + "\nLast name: " + currentUser.getlName() + "\nEmail : " +
+                            currentUser.getMail());
+                    alertDialogBuilder.setNegativeButton("Close", (dialog, which) -> dialog.cancel());
             default:
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }

@@ -27,7 +27,6 @@ public class DBConnection extends SQLiteOpenHelper {
     private static final String COL_THUMBNAIL = "article_Thumbnail";
     private static final String COL_SECTION = "article_Section";
     private static final String COL_URL = "article_URL";
-    private static final String COL_DATE = "articleDate";
 
     String createUserTable = "CREATE TABLE " + USERS_TABLE_NAME +
             " (" + COL_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -40,7 +39,7 @@ public class DBConnection extends SQLiteOpenHelper {
             FAVORITE_TABLE_NAME + " (" +
             COL_ARTICLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             COL_ARTICLE_ENDPOINT_ID + " TEXT,"+ COL_TITLE+" TEXT,"
-            + COL_SECTION + " TEXT," + COL_THUMBNAIL + " TEXT," + COL_URL + " TEXT," + COL_DATE + " TEXT);";
+            + COL_SECTION + " TEXT," + COL_THUMBNAIL + " TEXT," + COL_URL + " TEXT);";
 
     public DBConnection(Context ctx) {
         super(ctx, DATABASE_NAME, null, VERSION_NUM);
@@ -73,16 +72,15 @@ public class DBConnection extends SQLiteOpenHelper {
      * @param queryValues User object
      */
     public void insertUser (UserModel queryValues) {
-
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues newRowValues = new ContentValues();
 
         newRowValues.put(COL_FIRST_NAME, queryValues.getfName());
         newRowValues.put(COL_LAST_NAME, queryValues.getlName());
-        newRowValues.put(COL_EMAIL, queryValues.getEmail());
-        newRowValues.put(COL_PASS, queryValues.getPassword());
+        newRowValues.put(COL_EMAIL, queryValues.getMail());
+        newRowValues.put(COL_PASS, queryValues.getPass());
 
-        queryValues.setUserId(db.insert(USERS_TABLE_NAME, null, newRowValues));
+        queryValues.setUserId(db.insert(USERS_TABLE_NAME, null, newRowValues)) ;
         db.close();
     }
 
@@ -100,17 +98,12 @@ public class DBConnection extends SQLiteOpenHelper {
         newRowValues.put(COL_THUMBNAIL, queryValues.getThumbnail());
         newRowValues.put(COL_SECTION, queryValues.getSection());
         newRowValues.put(COL_URL, queryValues.getUrl());
-        newRowValues.put(COL_DATE, queryValues.getDate());
 
         long newId = db.insert(FAVORITE_TABLE_NAME, null, newRowValues);
         System.out.println(newId);
         db.close();
     }
 
-    /**
-     *  Deletes items from favorite list
-     * @param endpointId ID used to search database
-     */
     public void deleteArticle (String endpointId) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -130,7 +123,6 @@ public class DBConnection extends SQLiteOpenHelper {
         int thumbnailColumnIndex = results.getColumnIndex(COL_THUMBNAIL);
         int sectionColumnIndex = results.getColumnIndex(COL_SECTION);
         int urlColumnIndex = results.getColumnIndex(COL_URL);
-        int dateColumnIndex = results.getColumnIndex(COL_DATE);
 
         while(results.moveToNext()) {
 
@@ -139,8 +131,7 @@ public class DBConnection extends SQLiteOpenHelper {
             String thumbnail = results.getString(thumbnailColumnIndex);
             String section = results.getString(sectionColumnIndex);
             String url = results.getString(urlColumnIndex);
-            String date = results.getString(dateColumnIndex);
-            ArticleModel articleModel = new ArticleModel(endpoint, title, url, thumbnail, section, date);
+            ArticleModel articleModel = new ArticleModel(endpoint, title, url, thumbnail, section);
             articleList.add(articleModel);
         }
         results.close();
@@ -156,8 +147,11 @@ public class DBConnection extends SQLiteOpenHelper {
      */
     public UserModel getUser (String email){
         SQLiteDatabase db = this.getReadableDatabase();
+        long userId = 0;
+        String fName = "";
+        String lName = "";
+        String password = "";
 
-        UserModel myUserModel = new UserModel(0, "", "", email, "");
 
         String query = "Select * from Users where Email ='"+email+"'";
         Cursor results = db.rawQuery(query, null);
@@ -169,12 +163,20 @@ public class DBConnection extends SQLiteOpenHelper {
 
         while(results.moveToNext()) {
 
-            myUserModel.setUserId(results.getLong(userIdColumnIndex));
-            myUserModel.setfName(results.getString(fNameColumnIndex));
-            myUserModel.setlName(results.getString(lNameColumnIndex));
-            myUserModel.setPassword(results.getString(passwordColumnIndex));
+            //
+           userId = results.getLong(userIdColumnIndex);
+           fName = results.getString(fNameColumnIndex);
+           lName = results.getString(lNameColumnIndex);
+           password = results.getString(passwordColumnIndex);
+
+
+
 
         }
+        UserModel myUserModel = new UserModel(userId, fName, lName, email, password);
+        System.out.println("USER: " + password);
+
+
         results.close();
         return myUserModel;
     }

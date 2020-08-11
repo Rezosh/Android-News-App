@@ -4,7 +4,6 @@ package com.example.finalproject;
  * Model used to save Users
  */
 public class UserModel {
-
     private long userId;
     private String fName;
     private String lName;
@@ -19,45 +18,44 @@ public class UserModel {
         this.password = password;
     }
 
+
     // setters for the components of User
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUserId(long x){
+        this.userId = x;
     }
 
-    public void setfName(String fName) {
-        this.fName = fName;
+    public void  setfName(String x){
+        this.fName = x;
+    }
+    public void setlName(String x){
+        this.lName = x;
     }
 
-    public void setlName(String lName) {
-        this.lName = lName;
+    public void setMail(String x){
+        this.email=x;
+    }
+    public void setPass(String x){
+        this.password =x;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+
 
     // getters for components of users
-    public long getUserId() {
-        return userId;
+    public long getUserId(){
+        return this.userId;
     }
 
-    public String getfName() {
-        return fName;
+    public String getfName(){
+        return this.fName;
     }
-
-    public String getlName() {
-        return lName;
+    public String getlName(){
+        return this.lName;
     }
-
-    public String getEmail() {
-        return email;
+    public String getMail(){
+        return this.email;
     }
-
-    public String getPassword() {
-        return password;
+    public String getPass(){
+        return this.password;
     }
 }
