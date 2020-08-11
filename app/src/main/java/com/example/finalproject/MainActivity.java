@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawer;
     String userEmail;
+    String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +47,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Bundle passedData = getIntent().getExtras();
         if (passedData != null) {
             userEmail = passedData.getString("userEmail");
-        } else {
-            userEmail = "Email";
-        }
-        TextView headerEmail = headerView.findViewById(R.id.navHeader_userEmail);
-        headerEmail.setText(userEmail);
+            userName = passedData.getString("userName");
+            TextView headerEmail = headerView.findViewById(R.id.navHeader_userEmail);
+            headerEmail.setText(userEmail);
 
+            TextView name = headerView.findViewById(R.id.navHeader_name);
+            name.setText(userName);
+        }
+
+
+        // Navigation Drawer
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open, R.string.close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();

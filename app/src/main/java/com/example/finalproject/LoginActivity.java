@@ -1,10 +1,12 @@
 package com.example.finalproject;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -23,7 +25,6 @@ public class LoginActivity extends AppCompatActivity {
     EditText passwordField;
     private SharedPreferences.Editor loginPrefsEditor;
 
-//  TODO: Need to add progress bars
 //  TODO: When login btn is pressed check if valid login and then start activity
 
     @Override
@@ -58,10 +59,41 @@ public class LoginActivity extends AppCompatActivity {
 
         // When button is clicked it starts mainActivity
         loginBtn.setOnClickListener(click -> {
-            Toast.makeText(click.getContext(), "Logged in successfully!", Toast.LENGTH_SHORT).show();
-            Intent mainActivity = new Intent(this, MainActivity.class);
-            mainActivity.putExtra("userEmail", emailField.getText().toString());
-            startActivity(mainActivity);
+
+            UserModel userModel;
+            String userPassword = passwordField.getText().toString();
+            String userEmail = emailField.getText().toString();
+            DBConnection dbConnection = new DBConnection(this);
+            if (userEmail.equals("")) {
+                emailField.setError("Please enter your email");
+                return;
+            } else if (userPassword.equals("")) {
+                passwordField.setError("Please enter your password");
+                return;
+            }
+            userModel = dbConnection.getUser(userEmail);
+
+
+            if (userPassword.equals(userModel.getPassword()) && userEmail.equals(userModel.getEmail())) {
+                Toast.makeText(click.getContext(), "Logged in successfully!", Toast.LENGTH_SHORT).show();
+                Intent mainActivity = new Intent(this, MainActivity.class);
+                mainActivity.putExtra("userEmail", userEmail);
+                mainActivity.putExtra("userName", userModel.getfName() + " " + userModel.getlName());
+                startActivity(mainActivity);
+            } else {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle("Error!")
+                        .setMessage("Invalid Login! ")
+                        .setNegativeButton("Try Again", (dialog, which) -> dialog.cancel())
+                        .setPositiveButton("Register", (dialog, which) -> {
+                            Intent registerActivity = new Intent(this, RegisterActivity.class);
+                            startActivity(registerActivity);
+                        })
+                        .setCancelable(true)
+                        .create()
+                        .show();
+
+            }
         });
 
 

@@ -23,11 +23,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.finalproject.ArticleModel;
 import com.example.finalproject.DBConnection;
+import com.example.finalproject.ListAdapter;
 import com.example.finalproject.R;
 import com.google.android.material.snackbar.Snackbar;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -45,13 +47,14 @@ public class FavoriteFragment extends Fragment {
 
         View mainView = inflater.inflate(R.layout.fragment_favourite, container, false);
 
+
         if(getActivity() != null) {
             getActivity().setTitle("Favorites");
         }
 
         loadArticle();
         listView = mainView.findViewById(R.id.favoriteActivity_ListView);
-        ListAdapter listAdapter = new ListAdapter();
+        ListAdapter listAdapter = new ListAdapter(getContext(), articleList, R.layout.news_image);
         listView.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
         listView.setEmptyView(mainView.findViewById(R.id.emptyList));
@@ -80,7 +83,7 @@ public class FavoriteFragment extends Fragment {
 
             Snackbar.make(view, "Successfully removed article from favorites", Snackbar.LENGTH_LONG).show();
 
-            listAdapter.notifyDataSetChanged();
+            listAdapter.myRemove(position);
             loadArticle();
             return true;
         });
@@ -122,51 +125,5 @@ public class FavoriteFragment extends Fragment {
     public void loadArticle() {
         DBConnection dbConnection = new DBConnection(getContext());
         articleList = dbConnection.getArticle();
-    }
-
-
-    private class ListAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return articleList.size();
-        }
-
-        public Object getItem(int position) {
-            return "This is row " + position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        private int lastPosition = -1;
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View newView = convertView;
-
-            if (newView == null) {
-                newView = getLayoutInflater().inflate(R.layout.row, parent, false);
-            }
-            Log.i("FavoriteActivity", "<<<<---- ADAPTER ---->>>>");
-            TextView title = newView.findViewById(R.id.rowTitle);
-            title.setText(articleList.get(position).getTitle());
-
-            ImageView thumbnail = newView.findViewById(R.id.rowThumbnail);
-            Picasso
-                    .get()
-                    .load(articleList.get(position).getThumbnail())
-                    .resize(100, 100)
-                    .centerCrop()
-                    .into(thumbnail);
-            Animation animation = AnimationUtils.loadAnimation(getContext(), (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
-            newView.startAnimation(animation);
-            lastPosition = position;
-
-            return newView;
-
-        }
-
     }
 }
