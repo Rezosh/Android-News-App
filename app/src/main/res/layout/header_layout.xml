@@ -15,6 +15,7 @@
         android:contentDescription="@string/the_guardian" />
 
     <TextView
+        android:id="@+id/navHeader_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"

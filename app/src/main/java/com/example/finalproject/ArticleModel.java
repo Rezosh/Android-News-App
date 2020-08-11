@@ -10,14 +10,16 @@ public class ArticleModel {
     private String url;
     private String thumbnail;
     private String section;
+    private String date;
 
 
-    public ArticleModel(String endpoint, String title, String url, String thumbnail, String section) {
+    public ArticleModel(String endpoint, String title, String url, String thumbnail, String section, String date) {
         this.endpoint = endpoint;
         this.title = title;
         this.url = url;
         this.thumbnail = thumbnail;
         this.section = section;
+        this.date = date;
     }
 
     public ArticleModel(String endpoint) {
@@ -58,6 +60,10 @@ public class ArticleModel {
 
     public String getThumbnail() {
         return thumbnail;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public String getSection() {

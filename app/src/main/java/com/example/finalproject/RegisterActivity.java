@@ -21,7 +21,6 @@ public class RegisterActivity extends AppCompatActivity {
     EditText confirmPassword;
     SQLiteDatabase db;
 
-    //    TODO: Need to add progress bars
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

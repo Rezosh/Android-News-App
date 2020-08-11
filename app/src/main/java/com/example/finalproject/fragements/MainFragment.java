@@ -1,8 +1,6 @@
 package com.example.finalproject.fragements;
 
 
-
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,8 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -31,17 +27,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.transition.Visibility;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.finalproject.ArticleModel;
 import com.example.finalproject.DBConnection;
+import com.example.finalproject.ListAdapter;
 import com.example.finalproject.R;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.transition.MaterialFade;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,8 +47,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 public class MainFragment extends Fragment {
 
@@ -68,6 +65,9 @@ public class MainFragment extends Fragment {
      */
     List<ArticleModel> articleList = new ArrayList<>();
 
+    /**
+     * Initialize views
+     */
     ListView listView;
     ListAdapter listAdapter;
     SearchView searchView;
@@ -79,24 +79,29 @@ public class MainFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Inflate layout into fragment
         View mainView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        if(getActivity() != null) {
+        // Set toolbar title
+        if (getActivity() != null) {
             getActivity().setTitle("Home");
         }
 
+        // Find vies in layout
         listView = mainView.findViewById(R.id.mainActivity_ListView);
         progressBar = mainView.findViewById(R.id.main_progressBar);
         swipeRefreshLayout = mainView.findViewById(R.id.swiperefresh);
 
+        // Load content for main page; articles of the day
         myHTTPRequest = new MyHTTPRequest();
         myHTTPRequest.execute("https://content.guardianapis.com/search?api-key=099b3bf9-74f6-4441-b4ef-fb8ec4aabb46&page-size=50&show-fields=thumbnail");
 
-        listAdapter = new ListAdapter();
+        listAdapter = new ListAdapter(getContext(), articleList, R.layout.news_image);
         listView.setAdapter(listAdapter);
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
             ArticleModel selectedArticle = articleList.get(position);
+
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
             alertDialogBuilder.setTitle(selectedArticle.getTitle())
                     .setMessage("Url: " + selectedArticle.getUrl() + "\n\nSection: " + selectedArticle.getSection())
@@ -109,24 +114,28 @@ public class MainFragment extends Fragment {
 
         // Add article to favorites
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
+            // Find info for clicked row
             ArticleModel selectedArticle = articleList.get(position);
-
+            String endpoint = selectedArticle.getEndpoint();
+            // Connect to database
             DBConnection dbConnection = new DBConnection(getContext());
             db = dbConnection.getWritableDatabase();
 
+            // Insert article into database
             dbConnection.insertArticle(selectedArticle);
             Log.i(ACTIVITY_NAME, "Article successfully added to database");
-            Snackbar.make(view, "Added article to favorites", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, "Added article to favorites", Snackbar.LENGTH_LONG)
+                .setAction("Undo", click -> {
+                    dbConnection.deleteArticle(selectedArticle.getEndpoint());
+                })
+                .show();
             return true;
         });
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                myHTTPRequest = new MyHTTPRequest();
-                myHTTPRequest.execute("https://content.guardianapis.com/search?api-key=099b3bf9-74f6-4441-b4ef-fb8ec4aabb46&page-size=50&show-fields=thumbnail");
-                swipeRefreshLayout.setRefreshing(false);
-            }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            myHTTPRequest = new MyHTTPRequest();
+            myHTTPRequest.execute("https://content.guardianapis.com/search?api-key=099b3bf9-74f6-4441-b4ef-fb8ec4aabb46&page-size=50&show-fields=thumbnail");
+            swipeRefreshLayout.setRefreshing(false);
         });
 
 
@@ -161,52 +170,6 @@ public class MainFragment extends Fragment {
         });
     }
 
-
-    protected class ListAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return articleList.size();
-        }
-
-        public Object getItem(int position) {
-            return "This is row " + position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        private int lastPosition = -1;
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View newView = convertView;
-
-            if (newView == null) {
-                newView = getLayoutInflater().inflate(R.layout.row, parent, false);
-            }
-            Log.i("MainActivity", "<<<<---- ADAPTER ---->>>>");
-            TextView title = newView.findViewById(R.id.rowTitle);
-            title.setText(articleList.get(position).getTitle());
-
-            ImageView thumbnail = newView.findViewById(R.id.rowThumbnail);
-            Picasso
-                    .get()
-                    .load(articleList.get(position).getThumbnail())
-                    .resize(100, 100)
-                    .centerCrop()
-                    .into(thumbnail);
-            Animation animation = AnimationUtils.loadAnimation(getContext(), (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
-            newView.startAnimation(animation);
-            lastPosition = position;
-
-            return newView;
-        }
-
-    }
-
     @SuppressLint("StaticFieldLeak")
     private class MyHTTPRequest extends AsyncTask<String, Integer, String> {
         String articleTitle;
@@ -214,6 +177,8 @@ public class MainFragment extends Fragment {
         String articleThumbnail;
         String articleSection;
         String articleId;
+        String date;
+        String articleDate;
 
 
         public String doInBackground(String... args) {
@@ -244,7 +209,7 @@ public class MainFragment extends Fragment {
                 // convert string to JSON:
                 JSONObject resp = new JSONObject(result);
                 JSONObject parsed = resp.getJSONObject("response");
-                Log.i("MainActivity", "JSONObject parsed = " + parsed);
+                Log.i(ACTIVITY_NAME, "JSONObject parsed = " + parsed);
 
                 JSONArray jsonArray = parsed.getJSONArray("results");
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -253,24 +218,29 @@ public class MainFragment extends Fragment {
                         JSONObject anObject = jsonArray.getJSONObject(i);
                         JSONObject articleFields = anObject.getJSONObject("fields");
 
+                        // Add JSON results to article model
                         articleTitle = anObject.optString("webTitle");
                         articleUrl = anObject.optString("webUrl");
                         articleThumbnail = articleFields.optString("thumbnail");
                         articleSection = anObject.optString("sectionName");
                         articleId = anObject.optString("id");
+                        date = anObject.optString("webPublicationDate");
+                        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH);
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.ENGLISH);
+                        articleDate = formatter.format(Objects.requireNonNull(parser.parse(date)));
 
-                        ArticleModel articleModel = new ArticleModel(articleId, articleTitle, articleUrl, articleThumbnail, articleSection);
+                        ArticleModel articleModel = new ArticleModel(articleId, articleTitle, articleUrl, articleThumbnail, articleSection, articleDate);
                         articleList.add(articleModel);
 
                     } catch (JSONException e) {
-                        Log.e("MainActivity", "JSONException ERROR: " + e);
+                        Log.e(ACTIVITY_NAME, "JSONException ERROR: " + e);
 
                     }
                     progressBar.setProgress(95);
                 }
 
             } catch (Exception e) {
-                Log.e("MainActivity", "ERROR: " + e);
+                Log.e(ACTIVITY_NAME, "ERROR: " + e);
             }
 
             return "Done";

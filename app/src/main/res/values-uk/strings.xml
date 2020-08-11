@@ -31,5 +31,7 @@
     <string name="confirm">Confirm</string>
     <string name="enable_dark_mode">Enable Dark Mode</string>
     <string name="enable_light_mode">Enable Light Mode</string>
+    <string name="date">Date</string>
+    <string name="section">Section</string>
 
 </resources>
