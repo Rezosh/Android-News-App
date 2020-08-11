@@ -52,53 +52,26 @@ public class LoginActivity extends AppCompatActivity {
 
 
         // When button is clicked it starts registerActivity
-        registerBtn.setOnClickListener( click -> {
+        registerBtn.setOnClickListener(click -> {
             Intent registerActivity = new Intent(this, RegisterActivity.class);
             startActivity(registerActivity);
         });
 
         // When button is clicked it starts mainActivity
         loginBtn.setOnClickListener(click -> {
-
-            UserModel userModel;
-            String userPassword = passwordField.getText().toString();
             String userEmail = emailField.getText().toString();
-            DBConnection dbConnection = new DBConnection(this);
-            if (userEmail.equals("")) {
-                emailField.setError("Please enter your email");
-                return;
-            } else if (userPassword.equals("")) {
-                passwordField.setError("Please enter your password");
-                return;
-            }
-            userModel = dbConnection.getUser(userEmail);
 
 
-            if (userPassword.equals(userModel.getPassword()) && userEmail.equals(userModel.getEmail())) {
-                Toast.makeText(click.getContext(), "Logged in successfully!", Toast.LENGTH_SHORT).show();
-                Intent mainActivity = new Intent(this, MainActivity.class);
-                mainActivity.putExtra("userEmail", userEmail);
-                mainActivity.putExtra("userName", userModel.getfName() + " " + userModel.getlName());
-                startActivity(mainActivity);
-            } else {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setTitle("Error!")
-                        .setMessage("Invalid Login! ")
-                        .setNegativeButton("Try Again", (dialog, which) -> dialog.cancel())
-                        .setPositiveButton("Register", (dialog, which) -> {
-                            Intent registerActivity = new Intent(this, RegisterActivity.class);
-                            startActivity(registerActivity);
-                        })
-                        .setCancelable(true)
-                        .create()
-                        .show();
+            Toast.makeText(click.getContext(), "Logged in successfully!", Toast.LENGTH_SHORT).show();
+            Intent mainActivity = new Intent(this, MainActivity.class);
+            mainActivity.putExtra("userEmail", userEmail);
+            startActivity(mainActivity);
 
-            }
         });
 
 
         // When checkbox is checked it saves the users credentials in shared pref
-        rememberMe.setOnCheckedChangeListener( (rememberMe, click) -> {
+        rememberMe.setOnCheckedChangeListener((rememberMe, click) -> {
 
             String email = emailField.getText().toString();
             String password = passwordField.getText().toString();
