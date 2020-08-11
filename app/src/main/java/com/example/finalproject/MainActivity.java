@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Alert Box with application information.
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle("App Information");
-                alertDialogBuilder.setMessage("Made By: Sebastien Corneau and Paul Magera\nVersion: 1.0\nContact: corn0123@algonquinlive.com");
+                alertDialogBuilder.setMessage("Made By: Sebastien Corneau and Paul Magera\nVersion: 1.0\nContact: corn0123@algonquinlive.com,\npaul.seed18@gmail.com");
                 alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
                 alertDialogBuilder.create().show();
                 break;
@@ -146,6 +146,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 });
                 alertDialogBuilder.create().show();
                 break;
+            case R.id.drawer_user_info:
+                    Intent userPage = new Intent(this, LoginActivity.class);
+                    startActivity(userPage);
+                    finish();
             default:
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }
