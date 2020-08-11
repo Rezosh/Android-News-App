@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         // When button is clicked it starts registerActivity
-        registerBtn.setOnClickListener( click -> {
+        registerBtn.setOnClickListener(click -> {
             Intent registerActivity = new Intent(this, RegisterActivity.class);
             startActivity(registerActivity);
         });
