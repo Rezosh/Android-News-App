@@ -28,7 +28,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        DBConnection dbConnection = new DBConnection(this);
         setContentView(R.layout.activity_login);
 
 
@@ -58,16 +60,35 @@ public class LoginActivity extends AppCompatActivity {
 
         // When button is clicked it starts mainActivity
         loginBtn.setOnClickListener(click -> {
-            Toast.makeText(click.getContext(), "Logged in successfully!", Toast.LENGTH_SHORT).show();
-            Intent mainActivity = new Intent(this, MainActivity.class);
-            mainActivity.putExtra("userEmail", emailField.getText().toString());
-            startActivity(mainActivity);
+
+            // get email and password form user input
+            String email = emailField.getText().toString();
+            String password = passwordField.getText().toString();
+
+
+            UserModel userTest = dbConnection.getUser(email);
+            // check if password is correct.
+
+            // if pass word is correct go to main page
+            if (passwordTest(password, userTest.getPass()))
+            {
+                Toast.makeText(click.getContext(), "Logged in successfully!" + "Welcome " + userTest.getfName() + " " + userTest.getlName(), Toast.LENGTH_LONG).show();
+                Intent mainActivity = new Intent(this, MainActivity.class);
+                mainActivity.putExtra("userEmail", emailField.getText().toString());
+                startActivity(mainActivity);
+            }
+            else {
+                Toast.makeText(click.getContext(), "Wrong password, try again! ", Toast.LENGTH_LONG).show();
+
+            }
+
         });
+
+
 
 
         // When checkbox is checked it saves the users credentials in shared pref
         rememberMe.setOnCheckedChangeListener( (rememberMe, click) -> {
-
             String email = emailField.getText().toString();
             String password = passwordField.getText().toString();
 
@@ -82,5 +103,15 @@ public class LoginActivity extends AppCompatActivity {
 
         });
         Log.i(ACTIVITY_NAME, "In function: " + "onCreate");
+    }
+
+    // test user entered password
+    public boolean passwordTest(String claimedPass, String truePass){
+
+        if (truePass.equals(claimedPass)){
+            return true;
+        }
+        else
+        return false;
     }
 }

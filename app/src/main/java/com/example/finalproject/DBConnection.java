@@ -72,16 +72,15 @@ public class DBConnection extends SQLiteOpenHelper {
      * @param queryValues User object
      */
     public void insertUser (UserModel queryValues) {
-
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues newRowValues = new ContentValues();
 
-        newRowValues.put(COL_FIRST_NAME, queryValues.fName);
-        newRowValues.put(COL_LAST_NAME, queryValues.lName);
-        newRowValues.put(COL_EMAIL, queryValues.email);
-        newRowValues.put(COL_PASS, queryValues.password);
+        newRowValues.put(COL_FIRST_NAME, queryValues.getfName());
+        newRowValues.put(COL_LAST_NAME, queryValues.getlName());
+        newRowValues.put(COL_EMAIL, queryValues.getMail());
+        newRowValues.put(COL_PASS, queryValues.getPass());
 
-        queryValues.userId = db.insert(USERS_TABLE_NAME, null, newRowValues);
+        queryValues.setUserId(db.insert(USERS_TABLE_NAME, null, newRowValues)) ;
         db.close();
     }
 
@@ -148,8 +147,11 @@ public class DBConnection extends SQLiteOpenHelper {
      */
     public UserModel getUser (String email){
         SQLiteDatabase db = this.getReadableDatabase();
+        long userId = 0;
+        String fName = "";
+        String lName = "";
+        String password = "";
 
-        UserModel myUserModel = new UserModel(0, "", "", email, "");
 
         String query = "Select * from Users where Email ='"+email+"'";
         Cursor results = db.rawQuery(query, null);
@@ -161,13 +163,18 @@ public class DBConnection extends SQLiteOpenHelper {
 
         while(results.moveToNext()) {
 
-            myUserModel.userId = results.getLong(userIdColumnIndex);
-            myUserModel.fName = results.getString(fNameColumnIndex);
-            myUserModel.lName = results.getString(lNameColumnIndex);
-            myUserModel.password = results.getString(passwordColumnIndex);
+            //
+           userId = results.getLong(userIdColumnIndex);
+           fName = results.getString(fNameColumnIndex);
+           lName = results.getString(lNameColumnIndex);
+           password = results.getString(passwordColumnIndex);
+
+
+
 
         }
-        System.out.println("USER: " + myUserModel.password);
+        UserModel myUserModel = new UserModel(userId, fName, lName, email, password);
+        System.out.println("USER: " + password);
 
 
         results.close();
