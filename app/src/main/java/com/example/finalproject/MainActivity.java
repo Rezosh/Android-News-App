@@ -1,6 +1,7 @@
 package com.example.finalproject;
 
 import androidx.appcompat.app.AlertDialog;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -25,12 +26,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     String userEmail;
     DBConnection dbConnection = new DBConnection(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
 
         // Toolbar
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 alertDialogBuilder.create().show();
                 break;
             case R.id.toolbar_theme_dark:
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 break;
             case R.id.toolbar_theme_light:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -109,8 +109,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             default:
                 return super.onOptionsItemSelected(item);
-            }
-            return true;
+        }
+        return true;
 
     }
 
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavoriteFragment()).commit();
                 break;
 
-                case R.id.drawer_info:
+            case R.id.drawer_info:
                 // Alert Box with application information.
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle("App Information");
@@ -149,11 +149,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.drawer_user_info:
                 UserModel currentUser = dbConnection.getUser(userEmail);
-                    alertDialogBuilder = new AlertDialog.Builder(this);
-                    alertDialogBuilder.setTitle("User Info");
-                    alertDialogBuilder.setMessage("First name: " + currentUser.getfName() + "\nLast name: " + currentUser.getlName() + "\nEmail : " +
-                            currentUser.getMail());
-                    alertDialogBuilder.setNegativeButton("Close", (dialog, which) -> dialog.cancel());
+                alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle("User Info");
+                alertDialogBuilder.setMessage("First name: " + currentUser.getfName() + "\nLast name: " + currentUser.getlName() + "\nEmail : " +
+                        currentUser.getMail());
+                alertDialogBuilder.setNegativeButton("Close", (dialog, which) -> dialog.cancel());
+                alertDialogBuilder.create().show();
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }
