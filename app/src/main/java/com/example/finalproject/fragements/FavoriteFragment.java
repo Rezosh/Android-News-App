@@ -56,7 +56,6 @@ public class FavoriteFragment extends Fragment {
         listView = mainView.findViewById(R.id.favoriteActivity_ListView);
         ListAdapter listAdapter = new ListAdapter(getContext(), articleList, R.layout.news_image);
         listView.setAdapter(listAdapter);
-        listAdapter.notifyDataSetChanged();
         listView.setEmptyView(mainView.findViewById(R.id.emptyList));
 
 

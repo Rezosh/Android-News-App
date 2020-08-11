@@ -27,6 +27,7 @@ public class DBConnection extends SQLiteOpenHelper {
     private static final String COL_THUMBNAIL = "article_Thumbnail";
     private static final String COL_SECTION = "article_Section";
     private static final String COL_URL = "article_URL";
+    private static final String COL_DATE = "article_Date";
 
     String createUserTable = "CREATE TABLE " + USERS_TABLE_NAME +
             " (" + COL_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -39,7 +40,7 @@ public class DBConnection extends SQLiteOpenHelper {
             FAVORITE_TABLE_NAME + " (" +
             COL_ARTICLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             COL_ARTICLE_ENDPOINT_ID + " TEXT,"+ COL_TITLE+" TEXT,"
-            + COL_SECTION + " TEXT," + COL_THUMBNAIL + " TEXT," + COL_URL + " TEXT);";
+            + COL_SECTION + " TEXT," + COL_THUMBNAIL + " TEXT," + COL_URL + " TEXT," + COL_DATE + " TEXT);";
 
     public DBConnection(Context ctx) {
         super(ctx, DATABASE_NAME, null, VERSION_NUM);
@@ -98,12 +99,17 @@ public class DBConnection extends SQLiteOpenHelper {
         newRowValues.put(COL_THUMBNAIL, queryValues.getThumbnail());
         newRowValues.put(COL_SECTION, queryValues.getSection());
         newRowValues.put(COL_URL, queryValues.getUrl());
+        newRowValues.put(COL_DATE, queryValues.getDate());
 
         long newId = db.insert(FAVORITE_TABLE_NAME, null, newRowValues);
         System.out.println(newId);
         db.close();
     }
 
+    /**
+     *  Deletes items from favorite list
+     * @param endpointId ID used to search database
+     */
     public void deleteArticle (String endpointId) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -123,6 +129,7 @@ public class DBConnection extends SQLiteOpenHelper {
         int thumbnailColumnIndex = results.getColumnIndex(COL_THUMBNAIL);
         int sectionColumnIndex = results.getColumnIndex(COL_SECTION);
         int urlColumnIndex = results.getColumnIndex(COL_URL);
+        int dateColumnIndex = results.getColumnIndex(COL_DATE);
 
         while(results.moveToNext()) {
 
@@ -131,7 +138,8 @@ public class DBConnection extends SQLiteOpenHelper {
             String thumbnail = results.getString(thumbnailColumnIndex);
             String section = results.getString(sectionColumnIndex);
             String url = results.getString(urlColumnIndex);
-            ArticleModel articleModel = new ArticleModel(endpoint, title, url, thumbnail, section);
+            String date = results.getString(dateColumnIndex);
+            ArticleModel articleModel = new ArticleModel(endpoint, title, url, thumbnail, section, date);
             articleList.add(articleModel);
         }
         results.close();
